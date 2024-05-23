@@ -1,10 +1,12 @@
 [package]
-name = "godot-pennylane-rust"
+name = "godot_pennylane_rust"
 version = "0.1.0"
 edition = "2021"
 
 [lib]
+name = "godot_pennylane_rust"
 crate-type = ["cdylib"]  # Compile this crate to a dynamic C library.
 
 [dependencies]
 godot = { git = "https://github.com/godot-rust/gdext", branch = "master" }
+pyo3 = { version = "0.21.2", features = ["auto-initialize"] }
