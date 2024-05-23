@@ -1,19 +1,11 @@
 use godot::prelude::*;
 use godot::engine::Sprite2D;
 use godot::engine::ISprite2D;
-use pyo3::prelude::*;
-
-mod circuit;
-struct PennylaneGodotRust;
-
-#[gdextension]
-unsafe impl ExtensionLibrary for PennylaneGodotRust {}
-
 
 
 #[derive(GodotClass)]
 #[class(base=Sprite2D)]
-struct Player {
+struct Circuit {
     speed: f64,
     angular_speed: f64,
 
@@ -21,7 +13,7 @@ struct Player {
 }
 
 #[godot_api]
-impl ISprite2D for Player {
+impl ISprite2D for Circuit {
     fn init(base: Base<Sprite2D>) -> Self {
         godot_print!("Hello, world!"); // Prints to the Godot console
         
@@ -52,7 +44,7 @@ impl ISprite2D for Player {
 }
 
 #[godot_api]
-impl Player {
+impl Circuit {
     #[func]
     fn increase_speed(&mut self, amount: f64) {
         self.speed += amount;
