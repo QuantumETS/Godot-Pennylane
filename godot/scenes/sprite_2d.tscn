@@ -4,12 +4,14 @@
 [ext_resource type="Script" path="res://scenes/sprite_2d.gd" id="2_jnpu1"]
 [ext_resource type="Script" path="res://scenes/QuantumCircuit.gd" id="3_c0es6"]
 
-[node name="player" type="Player"]
-position = Vector2(547, 337)
-texture = ExtResource("1_m8qv1")
-script = ExtResource("2_jnpu1")
+[node name="Node" type="Node"]
 
 [node name="QuantumCircuit" type="QuantumCircuit" parent="."]
 script = ExtResource("3_c0es6")
 
-[connection signal="speed_increased" from="." to="." method="_on_speed_increased"]
+[node name="player" type="Player" parent="."]
+position = Vector2(547, 337)
+texture = ExtResource("1_m8qv1")
+script = ExtResource("2_jnpu1")
+
+[connection signal="speed_increased" from="player" to="player" method="_on_speed_increased"]

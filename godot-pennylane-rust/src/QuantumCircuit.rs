@@ -29,6 +29,7 @@ use spinoza::{
 #[class(base=Node)]
 struct QuantumCircuit {
     circuit: Option<State>,
+    circuit_size: i64,
     speed: f64,
     angular_speed: f64,
     base: Base<Node>
@@ -41,6 +42,7 @@ impl INode for QuantumCircuit {
         
         Self {
             circuit: None,
+            circuit_size: 0,
             speed: 400.0,
             angular_speed: std::f64::consts::PI,
             base,
@@ -71,14 +73,32 @@ impl QuantumCircuit {
     #[func]
     fn init_circuit(&mut self, nb_qubits: i64, nb_bits: i64) {
        self.circuit = Some(State::new(nb_qubits as usize));
+       self.circuit_size = nb_qubits;
     }
     #[func]
     fn x(&mut self,qubits_nb: i64) {
+        if let Some(ref mut circuit) = self.circuit {
+            apply(Gate::X, circuit, qubits_nb as usize);
+            godot_print!(
+                "Applied X gate on qubits {}",
+                qubits_nb
+            );
+        } else {
+            godot_print!("State is not initialized!");
+        }
 
     }
+    #[func]
     fn add_measurement(&mut self, qubits_nb: i64) {
     }
+    #[func]
     fn measure(&mut self,){
-        
+        let now = std::time::Instant::now();
+        let elapsed = now.elapsed().as_micros();
+        godot_print!(
+            "circuit result :  {} \nCaculated in {}s",
+            to_table(&self.circuit.clone().unwrap()),
+            elapsed
+        );        
     }
 }
