@@ -13,6 +13,7 @@ use godot::engine::INode;
 //https://github.com/HQSquantumsimulations/qoqo_examples
 //https://github.com/Q1tBV/q1tsim
 //https://qcgpu.github.io/
+//https://github.com/28Smiles/qukit <- wasm candidate
 //https://github.com/hajifkd/rusq
 //https://github.com/cqs-thu/qns-3
 //https://github.com/mtauraso/QuantumSimulator
