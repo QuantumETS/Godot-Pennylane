@@ -2,7 +2,7 @@ use godot::prelude::*;
 use godot::engine::Sprite2D;
 use godot::engine::ISprite2D;
 
-mod circuit;
+mod QuantumCircuit;
 struct PennylaneGodotRust;
 
 #[gdextension]
@@ -63,7 +63,7 @@ impl Player {
     }
     #[func]
     fn get_test_string(&mut self) -> GString{
-        "potatoes".to_string().into()
+        "potatoes2".to_string().into()
     }
 
     #[signal]

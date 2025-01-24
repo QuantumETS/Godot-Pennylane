@@ -1,11 +1,13 @@
 use godot::prelude::*;
+use godot::engine::Node;
+use godot::engine::INode;
 use godot::engine::Sprite2D;
 use godot::engine::ISprite2D;
 
 
 #[derive(GodotClass)]
 #[class(base=Sprite2D)]
-struct Circuit {
+struct QuantumCircuit {
     speed: f64,
     angular_speed: f64,
 
@@ -13,7 +15,7 @@ struct Circuit {
 }
 
 #[godot_api]
-impl ISprite2D for Circuit {
+impl INode for QuantumCircuit {
     fn init(base: Base<Sprite2D>) -> Self {
         godot_print!("Hello, world!"); // Prints to the Godot console
         
@@ -44,7 +46,7 @@ impl ISprite2D for Circuit {
 }
 
 #[godot_api]
-impl Circuit {
+impl QuantumCircuit {
     #[func]
     fn increase_speed(&mut self, amount: f64) {
         self.speed += amount;
