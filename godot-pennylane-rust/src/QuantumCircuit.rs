@@ -1,9 +1,23 @@
 use godot::prelude::*;
 use godot::engine::Node;
 use godot::engine::INode;
-use godot::engine::Sprite2D;
-use godot::engine::ISprite2D;
 
+
+// here are technology that could be integrated/choosen from
+//MUST HAVE :
+//https://github.com/Renmusxd/RustQIP
+//https://github.com/delapuente/qasmsim
+//BONUS/to look into (in order of how pertinent i think they are):
+//https://github.com/QuState/spinoza
+//https://github.com/MucTepDayH16/qvnt/
+//https://github.com/HQSquantumsimulations/qoqo_examples
+//https://github.com/Q1tBV/q1tsim
+//https://qcgpu.github.io/
+//https://github.com/hajifkd/rusq
+//https://github.com/cqs-thu/qns-3
+//https://github.com/mtauraso/QuantumSimulator
+//https://github.com/beneills/quantum <- meh
+//https://github.com/sorin-bolos/moara/blob/master/moara/src/simulator.rs <- not accessible
 
 #[derive(GodotClass)]
 #[class(base=Sprite2D)]
@@ -16,7 +30,7 @@ struct QuantumCircuit {
 
 #[godot_api]
 impl INode for QuantumCircuit {
-    fn init(base: Base<Sprite2D>) -> Self {
+    fn init(base: Base<Node>) -> Self {
         godot_print!("Hello, world!"); // Prints to the Godot console
         
         Self {
