@@ -1,7 +1,5 @@
-# Godot-Pennylane
-integration of pennylane within the godot game engine.
-
-Pennylane is a library to do quantum computing. 
+# Godot-Quantum-Simulator
+integration of a quantum computing statevector simulator within the godot game engine.
 
 ## Installation
 
