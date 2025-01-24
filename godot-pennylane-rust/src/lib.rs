@@ -9,6 +9,8 @@ struct PennylaneGodotRust;
 unsafe impl ExtensionLibrary for PennylaneGodotRust {}
 
 
+//Everything after this comment is not used, it's an example of how to interface within godot
+//in this case
 
 #[derive(GodotClass)]
 #[class(base=Sprite2D)]
