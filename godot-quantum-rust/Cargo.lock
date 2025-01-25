@@ -354,7 +354,7 @@ version = "0.0.0"
 source = "git+https://github.com/godot-rust/godot4-prebuilt?branch=4.2.2#5e6130a47f3dd31bfd02548cf8d90f47cb741916"
 
 [[package]]
-name = "godot_pennylane_rust"
+name = "godot_quantum_rust"
 version = "0.1.0"
 dependencies = [
  "godot",

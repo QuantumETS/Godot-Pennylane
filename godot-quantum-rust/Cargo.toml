@@ -1,10 +1,10 @@
 [package]
-name = "godot_pennylane_rust"
+name = "godot_quantum_rust"
 version = "0.1.0"
 edition = "2021"
 
 [lib]
-name = "godot_pennylane_rust"
+name = "godot_quantum_rust"
 crate-type = ["cdylib"]  # Compile this crate to a dynamic C library.
 
 [dependencies]
