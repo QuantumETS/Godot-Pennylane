@@ -123,6 +123,33 @@ impl QuantumCircuit {
     }
 
     #[func]
+    fn rx(&mut self, qubits_nb: i64, value:f64) { //phase shift
+        if let Some(ref mut circuit) = self.circuit {
+            apply(Gate::RX(value), circuit, qubits_nb as usize);
+        } else {
+            godot_print!("State is not initialized!");
+        }
+    }
+
+    #[func]
+    fn ry(&mut self, qubits_nb: i64, value:f64) { //phase shift
+        if let Some(ref mut circuit) = self.circuit {
+            apply(Gate::RX(value), circuit, qubits_nb as usize);
+        } else {
+            godot_print!("State is not initialized!");
+        }
+    }
+
+    #[func]
+    fn rz(&mut self, qubits_nb: i64, value:f64) { //phase shift
+        if let Some(ref mut circuit) = self.circuit {
+            apply(Gate::RX(value), circuit, qubits_nb as usize);
+        } else {
+            godot_print!("State is not initialized!");
+        }
+    }
+
+    #[func]
     fn identity(&mut self, qubits_nb: i64) {
     }
 
