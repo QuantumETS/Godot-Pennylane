@@ -5,7 +5,7 @@ use spinoza::*;
 use spinoza::{
     config::{Config, QSArgs},
     core::{State, CONFIG},
-    gates::{apply, Gate},
+    gates::{apply, Gate, c_apply},
     utils::{pretty_print_int, to_table},
 };
 // here are technology that could be integrated/choosen from
@@ -131,7 +131,7 @@ impl QuantumCircuit {
     #[func]
     fn cnot(&mut self, control_qubit_nb: i64, target_qubit_nb: i64) {
         if let Some(ref mut circuit) = self.circuit {
-            //c_apply(Gate::X, circuit, control_qubit_nb as usize, target_qubit_nb as usize);
+            c_apply(Gate::X, circuit, control_qubit_nb as usize, target_qubit_nb as usize);
         } else {
             godot_print!("State is not initialized!");
         }
@@ -151,7 +151,7 @@ impl QuantumCircuit {
         };
         if let Ok(gate) = result {
             if let Some(ref mut circuit) = self.circuit {
-                //c_apply(gate, circuit, control_qubit_nb as usize, target_qubit_nb as usize);
+                c_apply(gate, circuit, control_qubit_nb as usize, target_qubit_nb as usize);
             } else { godot_print!("State is not initialized!");}
         }
         else { godot_print!("custom controlled operation gate error"); }
