@@ -31,41 +31,17 @@ use spinoza::{
 struct QuantumCircuit {
     circuit: Option<State>,
     circuit_size: i64,
-    speed: f64,
-    angular_speed: f64,
     base: Base<Node>
 }
 
 #[godot_api]
 impl INode for QuantumCircuit {
-    fn init(base: Base<Node>) -> Self {
-        godot_print!("Hello, world!"); // Prints to the Godot console
-        
+    fn init(base: Base<Node>) -> Self {        
         Self {
             circuit: None,
             circuit_size: 0,
-            speed: 400.0,
-            angular_speed: std::f64::consts::PI,
             base,
         }
-    }
-    fn physics_process(&mut self, delta: f64) {
-        // In GDScript, this would be: 
-        // rotation += angular_speed * delta
-        
-        //let radians = (self.angular_speed * delta * self.speed) as f32;
-        //self.base_mut().rotate(radians);
-        // The 'rotate' method requires a f32, 
-        // therefore we convert 'self.angular_speed * delta' which is a f64 to a f32
-        //let rotation = self.base().get_rotation();
-        //let velocity = Vector2::UP.rotated(rotation) * self.speed as f32;
-        //self.base_mut().translate(velocity * delta as f32);
-        
-        // or verbose: 
-        // let this = self.base_mut();
-        // this.set_position(
-        //     this.position() + velocity * delta as f32
-        // );
     }
 }
 
