@@ -25,12 +25,22 @@ use spinoza::{
 //https://github.com/sorin-bolos/moara/blob/master/moara/src/simulator.rs <- not accessible
 //Attempts : 
 //https://github.com/Renmusxd/RustQIP <- tried it, bad ergonomics
+/* enum for the dropdown menu */
+#[derive(GodotConvert, Var, Export)]
+#[godot(via = GString)]
+pub enum Simulator {
+    Spinoza,
+    Qasmsim,
+}
+
 
 #[derive(GodotClass)]
 #[class(base=Node)]
 struct QuantumCircuit {
     circuit: Option<State>,
     circuit_size: i64,
+    #[export]
+    simulator: Simulator,
     base: Base<Node>
 }
 
@@ -40,6 +50,7 @@ impl INode for QuantumCircuit {
         Self {
             circuit: None,
             circuit_size: 0,
+            simulator: Simulator::Spinoza,
             base,
         }
     }
