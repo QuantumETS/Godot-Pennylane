@@ -1,11 +1,11 @@
 use godot::prelude::*;
 use godot::engine::Node;
 use godot::engine::INode;
-use spinoza::*;
 use spinoza::{
     config::{Config, QSArgs},
     core::{State, CONFIG},
     gates::{apply, Gate, c_apply},
+    measurement::measure_qubit,
     utils::{pretty_print_int, to_table},
 };
 // here are technology that could be integrated/choosen from
@@ -85,6 +85,7 @@ impl QuantumCircuit {
             godot_print!("State is not initialized!");
         }
     }
+
     #[func]
     fn y(&mut self, qubits_nb: i64) {
         if let Some(ref mut circuit) = self.circuit {
@@ -93,6 +94,7 @@ impl QuantumCircuit {
             godot_print!("State is not initialized!");
         }
     }
+
     #[func]
     fn z(&mut self, qubits_nb: i64) {
         if let Some(ref mut circuit) = self.circuit {
@@ -101,6 +103,7 @@ impl QuantumCircuit {
             godot_print!("State is not initialized!");
         }
     }
+
     #[func]
     fn h(&mut self, qubits_nb: i64) {
         if let Some(ref mut circuit) = self.circuit {
@@ -109,6 +112,7 @@ impl QuantumCircuit {
             godot_print!("State is not initialized!");
         }
     }
+
     #[func]
     fn p(&mut self, qubits_nb: i64, value:f64) { //phase shift
         if let Some(ref mut circuit) = self.circuit {
@@ -117,9 +121,11 @@ impl QuantumCircuit {
             godot_print!("State is not initialized!");
         }
     }
+
     #[func]
     fn identity(&mut self, qubits_nb: i64) {
     }
+
     #[func]
     fn swap(&mut self, qubits_nb_1: i64, qubits_nb_2: i64) {
         // if let Some(ref mut circuit) = self.circuit {
@@ -128,6 +134,7 @@ impl QuantumCircuit {
         //     godot_print!("State is not initialized!");
         // }
     }
+
     #[func]
     fn cnot(&mut self, control_qubit_nb: i64, target_qubit_nb: i64) {
         if let Some(ref mut circuit) = self.circuit {
@@ -136,6 +143,7 @@ impl QuantumCircuit {
             godot_print!("State is not initialized!");
         }
     }
+
     #[func]
     fn custom_controlled(&mut self, control_qubit_nb: i64, target_qubit_nb: i64, gatename_x_y_z_rx_ry_rz_h_p:GString, value:f64) {
         let result = match gatename_x_y_z_rx_ry_rz_h_p.to_string().as_str() {
@@ -156,6 +164,7 @@ impl QuantumCircuit {
         }
         else { godot_print!("custom controlled operation gate error"); }
     }
+
     #[func]
     fn add_measurement(&mut self, qubits_nb: i64) {
         if let Some(ref mut circuit) = self.circuit {
@@ -164,8 +173,9 @@ impl QuantumCircuit {
             godot_print!("State is not initialized!");
         }
     }
+
     #[func]
-    fn measure(&mut self,) {
+    fn measure_all(&mut self) -> Array<u8> { //currently, we return a u8 per binary result, we could concatenate the different results into fewer variable/virtual u1 instead.
         let now = std::time::Instant::now();
         let elapsed = now.elapsed().as_micros();
         godot_print!(
@@ -173,5 +183,12 @@ impl QuantumCircuit {
             to_table(&self.circuit.clone().unwrap()),
             elapsed
         );
+        let mut arr: Array<u8> = Array::new();
+        if let Some(ref mut circuit) = self.circuit {
+            for t in 0..self.circuit_size {
+                arr.push(measure_qubit(circuit, t as usize, true, None));
+            }
+        }
+        arr
     }
 }
