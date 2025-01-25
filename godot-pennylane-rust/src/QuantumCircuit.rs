@@ -1,6 +1,7 @@
 use godot::prelude::*;
 use godot::engine::Node;
 use godot::engine::INode;
+use spinoza::*;
 use spinoza::{
     config::{Config, QSArgs},
     core::{State, CONFIG},
@@ -75,30 +76,97 @@ impl QuantumCircuit {
        self.circuit = Some(State::new(nb_qubits as usize));
        self.circuit_size = nb_qubits;
     }
+
     #[func]
-    fn x(&mut self,qubits_nb: i64) {
+    fn x(&mut self, qubits_nb: i64) {
         if let Some(ref mut circuit) = self.circuit {
             apply(Gate::X, circuit, qubits_nb as usize);
-            godot_print!(
-                "Applied X gate on qubits {}",
-                qubits_nb
-            );
         } else {
             godot_print!("State is not initialized!");
         }
-
+    }
+    #[func]
+    fn y(&mut self, qubits_nb: i64) {
+        if let Some(ref mut circuit) = self.circuit {
+            apply(Gate::Y, circuit, qubits_nb as usize);
+        } else {
+            godot_print!("State is not initialized!");
+        }
+    }
+    #[func]
+    fn z(&mut self, qubits_nb: i64) {
+        if let Some(ref mut circuit) = self.circuit {
+            apply(Gate::Z, circuit, qubits_nb as usize);
+        } else {
+            godot_print!("State is not initialized!");
+        }
+    }
+    #[func]
+    fn h(&mut self, qubits_nb: i64) {
+        if let Some(ref mut circuit) = self.circuit {
+            apply(Gate::H, circuit, qubits_nb as usize);
+        } else {
+            godot_print!("State is not initialized!");
+        }
+    }
+    #[func]
+    fn p(&mut self, qubits_nb: i64, value:f64) { //phase shift
+        if let Some(ref mut circuit) = self.circuit {
+            apply(Gate::P(value), circuit, qubits_nb as usize);
+        } else {
+            godot_print!("State is not initialized!");
+        }
+    }
+    #[func]
+    fn identity(&mut self, qubits_nb: i64) {
+    }
+    #[func]
+    fn swap(&mut self, qubits_nb_1: i64, qubits_nb_2: i64) {
+        // if let Some(ref mut circuit) = self.circuit {
+        //     apply(Gate::SWAP(qubits_nb_1,qubits_nb_2), circuit);
+        // } else {
+        //     godot_print!("State is not initialized!");
+        // }
+    }
+    #[func]
+    fn cnot(&mut self, control_qubit_nb: i64, target_qubit_nb: i64) {
+        if let Some(ref mut circuit) = self.circuit {
+            //c_apply(Gate::X, circuit, control_qubit_nb as usize, target_qubit_nb as usize);
+        } else {
+            godot_print!("State is not initialized!");
+        }
+    }
+    #[func]
+    fn custom_controlled(&mut self, control_qubit_nb: i64, target_qubit_nb: i64, gatename_x_y_z_rx_ry_rz_h_p:GString, value:f64) {
+        let result = match gatename_x_y_z_rx_ry_rz_h_p.to_string().as_str() {
+            "x" => Ok(Gate::X),
+            "y" => Ok(Gate::Y),
+            "z" => Ok(Gate::Z),
+            "rx" => Ok(Gate::RX(value)),
+            "ry" => Ok(Gate::RY(value)),
+            "rz" => Ok(Gate::RZ(value)),
+            "h" => Ok(Gate::H),
+            "p" => Ok(Gate::P(value)),
+            _ => Err(()),
+        };
+        if let Ok(gate) = result {
+            if let Some(ref mut circuit) = self.circuit {
+                //c_apply(gate, circuit, control_qubit_nb as usize, target_qubit_nb as usize);
+            } else { godot_print!("State is not initialized!");}
+        }
+        else { godot_print!("custom controlled operation gate error"); }
     }
     #[func]
     fn add_measurement(&mut self, qubits_nb: i64) {
     }
     #[func]
-    fn measure(&mut self,){
+    fn measure(&mut self,) {
         let now = std::time::Instant::now();
         let elapsed = now.elapsed().as_micros();
         godot_print!(
             "circuit result :  {} \nCaculated in {}s",
             to_table(&self.circuit.clone().unwrap()),
             elapsed
-        );        
+        );
     }
 }
