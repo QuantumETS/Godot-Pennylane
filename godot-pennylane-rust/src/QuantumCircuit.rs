@@ -158,6 +158,11 @@ impl QuantumCircuit {
     }
     #[func]
     fn add_measurement(&mut self, qubits_nb: i64) {
+        if let Some(ref mut circuit) = self.circuit {
+            apply(Gate::M, circuit, qubits_nb as usize);
+        } else {
+            godot_print!("State is not initialized!");
+        }
     }
     #[func]
     fn measure(&mut self,) {
