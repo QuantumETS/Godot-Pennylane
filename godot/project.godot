@@ -10,8 +10,8 @@ config_version=5
 
 [application]
 
-config/name="godot-pennylane"
-run/main_scene="res://scenes/sprite_2d.tscn"
+config/name="godot-quantum-simulator"
+run/main_scene="res://scenes/main_scene.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
 config/icon="res://icon.svg"
 
