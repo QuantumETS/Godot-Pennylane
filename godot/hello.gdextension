@@ -4,11 +4,11 @@ compatibility_minimum = 4.1
 reloadable = true
 
 [libraries]
-linux.debug.x86_64 =     "res://../godot-pennylane-rust/target/debug/godot_pennylane_rust.so"
-linux.release.x86_64 =   "res://../godot-pennylane-rust/target/release/godot_pennylane_rust.so"
-windows.debug.x86_64 =   "res://../godot-pennylane-rust/target/debug/godot_pennylane_rust.dll"
-windows.release.x86_64 = "res://../godot-pennylane-rust/target/release/godot_pennylane_rust.dll"
-macos.debug =            "res://../godot-pennylane-rust/target/debug/godot_pennylane_rust.dylib"
-macos.release =          "res://../godot-pennylane-rust/target/release/godot_pennylane_rust.dylib"
-macos.debug.arm64 =      "res://../godot-pennylane-rust/target/debug/godot_pennylane_rust.dylib"
-macos.release.arm64 =    "res://../godot-pennylane-rust/target/release/godot_pennylane_rust.dylib"
+linux.debug.x86_64 =     "res://../godot-quantum-rust/target/debug/godot_quantum_rust.so"
+linux.release.x86_64 =   "res://../godot-quantum-rust/target/release/godot_quantum_rust.so"
+windows.debug.x86_64 =   "res://../godot-quantum-rust/target/debug/godot_quantum_rust.dll"
+windows.release.x86_64 = "res://../godot-quantum-rust/target/release/godot_quantum_rust.dll"
+macos.debug =            "res://../godot-quantum-rust/target/debug/godot_quantum_rust.dylib"
+macos.release =          "res://../godot-quantum-rust/target/release/godot_quantum_rust.dylib"
+macos.debug.arm64 =      "res://../godot-quantum-rust/target/debug/godot_quantum_rust.dylib"
+macos.release.arm64 =    "res://../godot-quantum-rust/target/release/godot_quantum_rust.dylib"
