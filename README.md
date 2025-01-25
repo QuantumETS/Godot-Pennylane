@@ -1,5 +1,5 @@
 # Godot-Quantum-Simulator-Node
-This repo aim to integrate existing quantum computing simulators within the godot game engine for rapid prototyping in visualization of qubits and rapid prototyping of games.
+This repo aim to integrate existing quantum computing simulators within the godot game engine for rapid prototyping of qubits visualization and quantum computing games.
 
 ## Supported Operators
 
