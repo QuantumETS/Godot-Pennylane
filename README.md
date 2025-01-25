@@ -73,6 +73,18 @@ The newly added QuantumCircuit node has the following function :
 
 TBD
 
+## Project file organisation
+
+The files under the godot/ folder are all related directly to the godot game engine. You can import the godot project from there.
+
+The files under godot-quantum-rust/ is where the GDextension code to create a quantum circuit node reside.
+
+`libs.rs` is the entry point for godot. from there  `QuantumCircuit.rs` and `SpinozaSimulator.rs` is loaded.
+
+`QuantumCircuit.rs` define the interface between godot and quantum computing simulators. It also define an interface to load different kind of simulator. When interfacing with a rust simulator, you should add your rust simulator into the dropdown enum over there and the way to construct your simulator in the match pattern code.
+
+`SpinozaSimulator.rs` is an implementation of the QuantumSimulator trait to interface with the Spinoza simulator. Look at this file to give you an idea on what is needed to implement your own simulator. 
+
 ## How to run this repo locally/compile
 go into the godot-pennylane-rust folder and use `cargo build` as you would any other rust project.
 
