@@ -1,4 +1,4 @@
-# Godot-Quantum-Simulator
+# Godot-Quantum-Simulator-Node
 integration of a quantum computing statevector simulator within the godot game engine.
 
 ## Installation
