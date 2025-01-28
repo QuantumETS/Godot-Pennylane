@@ -114,8 +114,7 @@ pub trait QuantumSimulator {
             Ok(result) => match result.histogram().clone() {
                 Some(result) => result,
                 None => {godot_print!("None in run_qasm_str_histogram "); default_histogram}
-            }
-            ,
+            },
             Err(e) => {
                 godot_print!("error in run_qasm_str_histogram {:?}", e); 
                 default_histogram
