@@ -66,10 +66,10 @@ pub trait QuantumSimulator {
         // memory() HashMap<String, u64>,
         // histogram() Option<Histogram>,
         // times() ExecutionTimes,
-        let source =  match qasmsim::run(qasm_string.to_string().as_str(), None) {
+        let source =  match qasmsim::run(qasm_string.to_string().as_str(), Some(shots as usize)) {
             Ok(result) => result.probabilities().clone(),
             Err(e) => {
-                godot_print!("error in run_qasm_str_memory {:?}", e);
+                godot_print!("error in run_qasm_str_probabilities {:?}", e);
                 vec![0.0]
             },
         };
@@ -89,7 +89,7 @@ pub trait QuantumSimulator {
         // memory() HashMap<String, u64>,
         // histogram() Option<Histogram>,
         // times() ExecutionTimes,
-        let source: HashMap<String, u64> =  match qasmsim::run(qasm_string.to_string().as_str(), None) {
+        let source: HashMap<String, u64> =  match qasmsim::run(qasm_string.to_string().as_str(), Some(shots as usize)) {
             Ok(result) => result.memory().clone(), // cloning reeeeee
             Err(e) => { 
                 godot_print!("error in run_qasm_str_memory {:?}", e);
