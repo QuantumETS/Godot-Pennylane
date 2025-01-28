@@ -60,12 +60,7 @@ pub trait QuantumSimulator {
     }
     fn run_qasm_str_probabilities(&mut self, qasm_string:GString, shots:i64) -> Array<f64>
     {
-        //possible value that can be gotten from the simulator
-        // statevector() StateVector,
-        // probabilities() Vec<f64>,
-        // memory() HashMap<String, u64>,
-        // histogram() Option<Histogram>,
-        // times() ExecutionTimes,
+        // probabilities() return the probabilities of obtaining each state
         let source =  match qasmsim::run(qasm_string.to_string().as_str(), Some(shots as usize)) {
             Ok(result) => result.probabilities().clone(),
             Err(e) => {
@@ -83,12 +78,7 @@ pub trait QuantumSimulator {
     }
     fn run_qasm_str_memory(&mut self, qasm_string:GString, shots:i64) -> Dictionary
     {
-        //possible value that can be gotten from the simulator
-        // statevector() StateVector,
-        // probabilities() Vec<f64>,
-        // memory() HashMap<String, u64>,
-        // histogram() Option<Histogram>,
-        // times() ExecutionTimes,
+        // memory() return a HashMap<String, u64> which has the classical names and the classical outcomes
         let source: HashMap<String, u64> =  match qasmsim::run(qasm_string.to_string().as_str(), Some(shots as usize)) {
             Ok(result) => result.memory().clone(), // cloning reeeeee
             Err(e) => { 
