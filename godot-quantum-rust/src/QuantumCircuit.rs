@@ -5,6 +5,7 @@ use godot::engine::INode;
 use crate::SpinozaSimulator::SpinozaSimulatorStruct;
 use std::collections::HashMap;
 use qasmsim::statevector::{assert_approx_eq, Complex, StateVector};
+use qasmsim::Histogram;
 use std::f64::consts::FRAC_1_SQRT_2;
 use qasmsim;
 
@@ -104,18 +105,38 @@ pub trait QuantumSimulator {
     
         godot_dict
     }
-    fn run_qasm_str_histogram(&mut self, qasm_string:GString, shots:i64)
+    fn run_qasm_str_histogram(&mut self, qasm_string:GString, shots:i64) -> Dictionary
     {
-        //possible value that can be gotten from the simulator
-        // statevector() StateVector,
-        // probabilities() Vec<f64>,
-        // memory() HashMap<String, u64>,
-        // histogram() Option<Histogram>,
-        // times() ExecutionTimes,
-        // let source =  match qasmsim::run(qasm_string.to_string().as_str(), None) {
-        //     Ok(result) => result.histogram(),
-        //     Err(e) => godot_print!("result error {:?}", e),
-        // };
+        let default_histogram: Histogram = HashMap::new();
+
+        // histogram() return the number of time a particular value was measured in a histogram
+        let source =  match qasmsim::run(qasm_string.to_string().as_str(), Some(shots as usize)) {
+            Ok(result) => match result.histogram().clone() {
+                Some(result) => result,
+                None => {godot_print!("None in run_qasm_str_histogram "); default_histogram}
+            }
+            ,
+            Err(e) => {
+                godot_print!("error in run_qasm_str_histogram {:?}", e); 
+                default_histogram
+            }
+        };
+
+        // Convert Histogram to Godot Dictionary
+        let mut godot_dict = Dictionary::new();
+        for (key, value_vec) in source {
+            godot_print!("run_qasm_str_histogram {:?}", key);
+            let mut godot_array = Array::new();
+            for (measured_value, count) in value_vec {
+                let mut pair = Dictionary::new();
+                pair.insert("measured_value", measured_value);
+                pair.insert("count", count as i64);
+                godot_array.push(pair);
+            }
+            godot_dict.insert(key, godot_array);
+        }
+
+        godot_dict
     }
 }
 
@@ -252,5 +273,10 @@ impl QuantumCircuit {
     fn run_qasm_str_statevector(&mut self, qasm_string:GString, shots:i64) -> Dictionary
     {
         self.quantumSimulator.run_qasm_str_statevector(qasm_string, shots)
+    }
+    #[func]
+    fn run_qasm_str_histogram(&mut self, qasm_string:GString, shots:i64) -> Dictionary
+    {
+        self.quantumSimulator.run_qasm_str_histogram(qasm_string, shots)
     }
 }
