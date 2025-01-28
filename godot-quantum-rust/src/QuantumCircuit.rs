@@ -45,18 +45,28 @@ pub trait QuantumSimulator {
     fn get_expectation_value(&mut self, measurement_axis_x_y_z:GString);
     fn measure_all(&mut self) -> Array<u8>;
     //default implementation for qasm simulator using qasmsim
-    fn run_qasm_str_statevector(&mut self, qasm_string:GString, shots:i64)
+    fn run_qasm_str_statevector(&mut self, qasm_string:GString, shots:i64) -> Dictionary
     {
-        //possible value that can be gotten from the simulator
-        // statevector() StateVector,
-        // probabilities() Vec<f64>,
-        // memory() HashMap<String, u64>,
-        // histogram() Option<Histogram>,
-        // times() ExecutionTimes,
-        // let source =  match qasmsim::run(qasm_string.to_string().as_str(), None) {
-        //     Ok(result) => result.statevector(),
-        //     Err(e) => {godot_print!("result error {:?}", e); &StateVector::new(2)}
-        // };
+        // statevector() return the StateVector of the circuit in a dictionary containing an array containing dictionaries
+        let source =  match qasmsim::run(qasm_string.to_string().as_str(), None) {
+            Ok(result) => result.statevector().clone(),
+            Err(e) => {godot_print!("result error {:?}", e); StateVector::new(2)}
+        };
+
+        let mut godot_dict = Dictionary::new();
+        godot_dict.insert("qubit_width", source.qubit_width() as i64);
+    
+        // Convert complex bases to an array of dictionaries
+        let mut bases_array = Array::new();
+        for complex in source.as_complex_bases() {
+            let mut complex_dict = Dictionary::new();
+            complex_dict.insert("re", complex.re);
+            complex_dict.insert("im", complex.im);
+            bases_array.push(complex_dict);
+        }
+    
+        godot_dict.insert("bases", bases_array);
+        godot_dict
     }
     fn run_qasm_str_probabilities(&mut self, qasm_string:GString, shots:i64) -> Array<f64>
     {
@@ -237,5 +247,10 @@ impl QuantumCircuit {
     fn run_qasm_str_memory(&mut self, qasm_string:GString, shots:i64) -> Dictionary
     {
         self.quantumSimulator.run_qasm_str_memory(qasm_string, shots)
+    }
+    #[func]
+    fn run_qasm_str_statevector(&mut self, qasm_string:GString, shots:i64) -> Dictionary
+    {
+        self.quantumSimulator.run_qasm_str_statevector(qasm_string, shots)
     }
 }
