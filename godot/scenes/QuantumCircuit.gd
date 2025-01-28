@@ -31,6 +31,10 @@ func _ready():
 	print("qasm state : ")
 	for key in result_state.keys():
 		print(key,result_state[key])
+	var result_hist = run_qasm_str_histogram(qasm_string, 100) # return dictionary
+	print("qasm hist : ")
+	for key in result_hist.keys():
+		print(key,result_hist[key])
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
