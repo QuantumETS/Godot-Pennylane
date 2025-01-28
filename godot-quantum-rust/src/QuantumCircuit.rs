@@ -3,6 +3,7 @@ use godot::engine::Node;
 use godot::engine::INode;
 
 use crate::SpinozaSimulator::SpinozaSimulatorStruct;
+use std::collections::HashMap;
 use qasmsim::statevector::{assert_approx_eq, Complex, StateVector};
 use std::f64::consts::FRAC_1_SQRT_2;
 use qasmsim;
@@ -68,7 +69,7 @@ pub trait QuantumSimulator {
         let source =  match qasmsim::run(qasm_string.to_string().as_str(), None) {
             Ok(result) => result.probabilities().clone(),
             Err(e) => {
-                godot_print!("result error {:?}", e);
+                godot_print!("error in run_qasm_str_memory {:?}", e);
                 vec![0.0]
             },
         };
@@ -80,7 +81,7 @@ pub trait QuantumSimulator {
     
         godot_array
     }
-    fn run_qasm_str_memory(&mut self, qasm_string:GString, shots:i64)
+    fn run_qasm_str_memory(&mut self, qasm_string:GString, shots:i64) -> Dictionary
     {
         //possible value that can be gotten from the simulator
         // statevector() StateVector,
@@ -88,10 +89,20 @@ pub trait QuantumSimulator {
         // memory() HashMap<String, u64>,
         // histogram() Option<Histogram>,
         // times() ExecutionTimes,
-        // let source =  match qasmsim::run(qasm_string.to_string().as_str(), None) {
-        //     Ok(result) => result.memory(),
-        //     Err(e) => godot_print!("result error {:?}", e),
-        // };
+        let source: HashMap<String, u64> =  match qasmsim::run(qasm_string.to_string().as_str(), None) {
+            Ok(result) => result.memory().clone(), // cloning reeeeee
+            Err(e) => { 
+                godot_print!("error in run_qasm_str_memory {:?}", e);
+                HashMap::new()
+            }
+        };
+
+        let mut godot_dict = Dictionary::new();
+        for (key, value) in source {
+            godot_dict.insert(key, value); //reconstructing manually, reeeeee
+        }
+    
+        godot_dict
     }
     fn run_qasm_str_histogram(&mut self, qasm_string:GString, shots:i64)
     {
@@ -231,5 +242,10 @@ impl QuantumCircuit {
     fn run_qasm_str_probabilities(&mut self, qasm_string:GString, shots:i64) -> Array<f64>
     {
         self.quantumSimulator.run_qasm_str_probabilities(qasm_string, shots)
+    }
+    #[func]
+    fn run_qasm_str_memory(&mut self, qasm_string:GString, shots:i64) -> Dictionary
+    {
+        self.quantumSimulator.run_qasm_str_memory(qasm_string, shots)
     }
 }
