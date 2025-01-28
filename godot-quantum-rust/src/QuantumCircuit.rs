@@ -178,9 +178,8 @@ impl INode for QuantumCircuit {
 #[godot_api]
 impl QuantumCircuit {
     #[func]
-    /// Initialise a quantum circuit on the quantum simulator. This function should be called first before doing anything else.
+    /// Initialise a quantum circuit on the quantum simulator. This function should be called first before doing anything else (unless using the qasm simulator).
     /// nb_qubits specify the number of Qubits in the circuits that must be initialized. nb_bits specify the number of classical bits used for storing measurement.
-    /// unless using the qasm simulator.
     fn init_circuit(&mut self, nb_qubits: i64, nb_bits: i64) {
         self.quantumSimulator = match self.simulator{
             Simulator::Spinoza => {Box::new(SpinozaSimulatorStruct::new())}
