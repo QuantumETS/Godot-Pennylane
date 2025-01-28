@@ -3,6 +3,11 @@ use godot::engine::Node;
 use godot::engine::INode;
 
 use crate::SpinozaSimulator::SpinozaSimulatorStruct;
+use qasmsim::statevector::{assert_approx_eq, Complex, StateVector};
+use std::f64::consts::FRAC_1_SQRT_2;
+use qasmsim;
+
+
 // here are technology that could be integrated/choosen from
 //MUST HAVE :
 //https://github.com/QuState/spinoza
@@ -38,6 +43,69 @@ pub trait QuantumSimulator {
     fn add_measurement(&mut self, qubits_nb: i64);
     fn get_expectation_value(&mut self, measurement_axis_x_y_z:GString);
     fn measure_all(&mut self) -> Array<u8>;
+    //default implementation for qasm simulator using qasmsim
+    fn run_qasm_str_statevector(&mut self, qasm_string:GString, shots:i64)
+    {
+        //possible value that can be gotten from the simulator
+        // statevector() StateVector,
+        // probabilities() Vec<f64>,
+        // memory() HashMap<String, u64>,
+        // histogram() Option<Histogram>,
+        // times() ExecutionTimes,
+        // let source =  match qasmsim::run(qasm_string.to_string().as_str(), None) {
+        //     Ok(result) => result.statevector(),
+        //     Err(e) => {godot_print!("result error {:?}", e); &StateVector::new(2)}
+        // };
+    }
+    fn run_qasm_str_probabilities(&mut self, qasm_string:GString, shots:i64) -> Array<f64>
+    {
+        //possible value that can be gotten from the simulator
+        // statevector() StateVector,
+        // probabilities() Vec<f64>,
+        // memory() HashMap<String, u64>,
+        // histogram() Option<Histogram>,
+        // times() ExecutionTimes,
+        let source =  match qasmsim::run(qasm_string.to_string().as_str(), None) {
+            Ok(result) => result.probabilities().clone(),
+            Err(e) => {
+                godot_print!("result error {:?}", e);
+                vec![0.0]
+            },
+        };
+
+        let mut godot_array = Array::new();
+        for value in source {
+            godot_array.push(value); //reeee
+        }
+    
+        godot_array
+    }
+    fn run_qasm_str_memory(&mut self, qasm_string:GString, shots:i64)
+    {
+        //possible value that can be gotten from the simulator
+        // statevector() StateVector,
+        // probabilities() Vec<f64>,
+        // memory() HashMap<String, u64>,
+        // histogram() Option<Histogram>,
+        // times() ExecutionTimes,
+        // let source =  match qasmsim::run(qasm_string.to_string().as_str(), None) {
+        //     Ok(result) => result.memory(),
+        //     Err(e) => godot_print!("result error {:?}", e),
+        // };
+    }
+    fn run_qasm_str_histogram(&mut self, qasm_string:GString, shots:i64)
+    {
+        //possible value that can be gotten from the simulator
+        // statevector() StateVector,
+        // probabilities() Vec<f64>,
+        // memory() HashMap<String, u64>,
+        // histogram() Option<Histogram>,
+        // times() ExecutionTimes,
+        // let source =  match qasmsim::run(qasm_string.to_string().as_str(), None) {
+        //     Ok(result) => result.histogram(),
+        //     Err(e) => godot_print!("result error {:?}", e),
+        // };
+    }
 }
 
 
@@ -158,5 +226,10 @@ impl QuantumCircuit {
     #[func]
     fn measure_all(&mut self) -> Array<u8> { //currently, we return a u8 per binary result, we could concatenate the different results into fewer variable/virtual u1 instead.
         self.quantumSimulator.measure_all()
+    }
+    #[func]
+    fn run_qasm_str_probabilities(&mut self, qasm_string:GString, shots:i64) -> Array<f64>
+    {
+        self.quantumSimulator.run_qasm_str_probabilities(qasm_string, shots)
     }
 }

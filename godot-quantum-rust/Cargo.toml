@@ -10,3 +10,5 @@ crate-type = ["cdylib"]  # Compile this crate to a dynamic C library.
 [dependencies]
 godot = { git = "https://github.com/godot-rust/gdext", branch = "master" }
 spinoza = { git = "https://github.com/QuState/spinoza.git", branch = "main" }
+# moara = { git = "https://github.com/sorin-bolos/moara", branch = "master" }
+qasmsim = { git = "https://github.com/delapuente/qasmsim", branch = "main" }
