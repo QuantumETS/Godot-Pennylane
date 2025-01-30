@@ -153,27 +153,30 @@ impl QuantumSimulator for SpinozaSimulatorStruct {
         let now = std::time::Instant::now();
         let targets = (0..self.circuit_size as usize).collect::<Vec<usize>>();
         if let Some(ref circuit) = self.circuit {
-            let exp_vals = xyz_expectation_value(measurement_axis_x_y_z.to_string().chars().next().unwrap(), circuit, &targets);
+            let exp_vals = xyz_expectation_value(measurement_axis_x_y_z.to_string().chars().next().unwrap(), circuit, &targets); // their function doesn't properly compute the expectation value
             let mut godot_array = Array::new();
             for value in exp_vals {
                 godot_array.push(value); //reeee
             }
             let elapsed = now.elapsed().as_micros();
-            godot_print!("{:?}",elapsed.to_string());
+            godot_print!("time to calculate expectation value : .{:?}s", elapsed.to_string());
             godot_array
         } else { 
             Array::<f64>::new()
         }
     }
 
-    fn measure_all(&mut self, _shots:i64) -> Array<GString> { //currently, we return a u8 per binary result, we could concatenate the different results into fewer variable/virtual u1 instead.
+    fn measure_all(&mut self, _shots:i64) -> Array<GString> {
         let now = std::time::Instant::now();
         let mut arr: Array<GString> = Array::new();
+        let mut to_submit : String = String::new();
         if let Some(ref mut circuit) = self.circuit {
             for t in 0..self.circuit_size {
-                arr.push(GString::from(measure_qubit(circuit, t as usize, true, None).to_string()));
+                let temp = measure_qubit(circuit, t as usize, true, None).to_string();
+                to_submit = format!("{to_submit}{temp}");
             }
         }
+        arr.push(GString::from(to_submit));
         let elapsed = now.elapsed().as_micros();
         godot_print!(
             "circuit result :  {} \nCaculated in {}s",
