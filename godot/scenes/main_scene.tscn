@@ -5,4 +5,5 @@
 [node name="Node" type="Node"]
 
 [node name="QuantumCircuit" type="QuantumCircuit" parent="."]
+simulator = "q1tsim"
 script = ExtResource("1_bfqgr")
