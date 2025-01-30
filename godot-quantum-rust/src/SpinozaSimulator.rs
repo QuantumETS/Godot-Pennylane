@@ -2,12 +2,9 @@ use godot::log::godot_print;
 use crate::QuantumCircuit::QuantumSimulator;
 use godot::prelude::*;
 use spinoza::{
-    gates::{apply, Gate, c_apply},
-    measurement::measure_qubit,
-    core::{xyz_expectation_value, State},
-    utils::to_table,
+    core::{qubit_expectation_value, xyz_expectation_value, State}, gates::{apply, c_apply, Gate}, measurement::measure_qubit, utils::to_table
 };
-
+// interesting but not implemented feature from this simulator : qcbm, value_encoding, custom multi controlled
 pub struct SpinozaSimulatorStruct {
     circuit: Option<State>,
     circuit_size: i64,
@@ -154,6 +151,7 @@ impl QuantumSimulator for SpinozaSimulatorStruct {
         let targets = (0..self.circuit_size as usize).collect::<Vec<usize>>();
         if let Some(ref circuit) = self.circuit {
             let exp_vals = xyz_expectation_value(measurement_axis_x_y_z.to_string().chars().next().unwrap(), circuit, &targets); // their function doesn't properly compute the expectation value
+            //let exp_vals: Vec<_> = (0..(self.circuit_size as usize)).map(|t| qubit_expectation_value(&circuit, t)).collect();
             let mut godot_array = Array::new();
             for value in exp_vals {
                 godot_array.push(value); //reeee
@@ -184,5 +182,25 @@ impl QuantumSimulator for SpinozaSimulatorStruct {
             elapsed
         );
         arr
+    }
+
+    fn get_statevector(&mut self) -> Dictionary
+    {
+        let circuit = self.circuit.clone().unwrap();
+        let mut dict = Dictionary::new();
+
+        let mut reals_array = Array::new();
+        let mut imags_array = Array::new();
+        
+        for &real in &circuit.reals {
+            reals_array.push(Variant::from(real)); // Convert f64 to Variant
+        }
+        for &imag in &circuit.imags {
+            imags_array.push(Variant::from(imag)); // Convert f64 to Variant
+        }
+
+        dict.insert("reals", reals_array);
+        dict.insert("imags", imags_array); 
+        dict   
     }
 }

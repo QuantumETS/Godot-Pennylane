@@ -45,6 +45,11 @@ pub trait QuantumSimulator {
     fn custom_controlled(&mut self, control_qubit_nb: i64, target_qubit_nb: i64, gatename_x_y_z_rx_ry_rz_h_p:GString, value:f64);
     fn add_measurement(&mut self, qubits_nb: i64);
     fn get_expectation_value(&mut self, measurement_axis_x_y_z:GString) -> Array<f64>;
+    fn get_statevector(&mut self) -> Dictionary
+    {
+        godot_print!("no statevector available on this simulator");
+        Dictionary::new()
+    }
     fn measure_all(&mut self, shots:i64) -> Array<GString>;
     //default implementation for qasm simulator using qasmsim
     fn run_qasm_str_statevector(&mut self, qasm_string:GString, shots:i64) -> Dictionary
@@ -280,6 +285,14 @@ impl QuantumCircuit {
     fn measure_all(&mut self, shots:i64) -> Array<GString> { //currently, we return a u8 per binary result, we could concatenate the different results into fewer variable/virtual u1 instead.
         self.quantum_simulator.measure_all(shots)
     }
+    
+    #[func]
+    /// Get the statevector of the circuit if available
+    fn get_statevector(&mut self) -> Dictionary
+    {
+        self.quantum_simulator.get_statevector()
+    }
+
     #[func]
     /// Runs a QASM string to compute the probabilities of outcomes for a given number of shots.
     fn run_qasm_str_probabilities(&mut self, qasm_string:GString, shots:i64) -> Array<f64>
