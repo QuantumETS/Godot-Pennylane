@@ -25,8 +25,8 @@ impl SpinozaSimulatorStruct {
 
 impl QuantumSimulator for SpinozaSimulatorStruct {
     fn init_circuit(&mut self, nb_qubits: i64, _nb_bits: i64) {
-       self.circuit = Some(State::new(nb_qubits as usize));
-       self.circuit_size = nb_qubits;
+        self.circuit = Some(State::new(nb_qubits as usize));
+        self.circuit_size = nb_qubits;
     }
 
     fn x(&mut self, qubits_nb: i64) {

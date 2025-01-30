@@ -169,7 +169,7 @@ impl QuantumSimulator for q1tsimSimulatorStruct {
                     arr.push(GString::from(bits.clone()));
                 }
                 godot_print!("{}: {}", bits, count);
-            }        
+            }
         }
         let elapsed = now.elapsed().as_micros();
         godot_print!(
