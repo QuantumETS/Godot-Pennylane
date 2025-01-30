@@ -110,7 +110,7 @@ impl QuantumSimulator for SpinozaSimulatorStruct {
         // } else {
         //     godot_print!("State is not initialized!");
         // }
-        godot_print!("not implemented")
+        godot_print!("swap not implemented")
     }
 
     fn cnot(&mut self, control_qubit_nb: i64, target_qubit_nb: i64) {
