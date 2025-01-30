@@ -144,14 +144,7 @@ impl QuantumSimulator for q1tsimSimulatorStruct {
     }
 
     fn get_expectation_value(&mut self, measurement_axis_x_y_z:GString) -> Array<f64> { 
-        // let now = std::time::Instant::now();
-        // let elapsed = now.elapsed().as_micros();
-        // let targets = (0..self.circuit_size as usize).collect::<Vec<usize>>();
-        // if let Some(ref circuit) = self.circuit {
-        //     let exp_vals = xyz_expectation_value(measurement_axis_x_y_z.to_string().chars().next().unwrap(), circuit, &targets);
-        //     godot_print!("expectation values: {:?}", exp_vals);
-        // }
-        godot_print!("expectation values not implemented or available on this simulator");
+        godot_print!("expectation values not available on this simulator");
         Array::<f64>::new()
     }
 
