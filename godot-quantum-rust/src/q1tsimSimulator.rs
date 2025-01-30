@@ -148,7 +148,7 @@ impl QuantumSimulator for q1tsimSimulatorStruct {
         Array::<f64>::new()
     }
 
-    fn measure_all(&mut self, shots:i64) -> Array<GString> { //currently, we return a u8 per binary result, we could concatenate the different results into fewer variable/virtual u1 instead.
+    fn measure_all(&mut self, shots:i64) -> Array<GString> {
         let now = std::time::Instant::now();
         let mut arr: Array<GString> = Array::new();
         if let Some(ref mut circuit) = self.circuit {

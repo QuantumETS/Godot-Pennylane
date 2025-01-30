@@ -44,7 +44,11 @@ pub trait QuantumSimulator {
     fn cnot(&mut self, control_qubit_nb: i64, target_qubit_nb: i64);
     fn custom_controlled(&mut self, control_qubit_nb: i64, target_qubit_nb: i64, gatename_x_y_z_rx_ry_rz_h_p:GString, value:f64);
     fn add_measurement(&mut self, qubits_nb: i64);
-    fn get_expectation_value(&mut self, measurement_axis_x_y_z:GString) -> Array<f64>;
+    fn get_expectation_value(&mut self, measurement_axis_x_y_z:GString) -> Array<f64>
+    {
+        godot_print!("expectation values not available on this simulator");
+        Array::<f64>::new()
+    }
     fn get_statevector(&mut self) -> Dictionary
     {
         godot_print!("no statevector available on this simulator");
