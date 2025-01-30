@@ -21,8 +21,10 @@ impl q1tsimSimulatorStruct {
 
 impl QuantumSimulator for q1tsimSimulatorStruct {
     fn init_circuit(&mut self, nb_qubits: i64, nb_bits: i64) {
-       self.circuit = Some(circuit::Circuit::new(nb_qubits as usize, nb_bits as usize));
-       self.circuit_size = nb_qubits;
+        let mut measurement_bit = nb_bits;
+        if nb_bits < nb_qubits {measurement_bit = nb_qubits;}
+        self.circuit = Some(circuit::Circuit::new(nb_qubits as usize, measurement_bit as usize));
+        self.circuit_size = nb_qubits;
     }
 
     fn x(&mut self, qubits_nb: i64) {
