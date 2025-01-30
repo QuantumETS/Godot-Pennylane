@@ -83,7 +83,9 @@ The files under godot-quantum-rust/ is where the GDextension code to create a qu
 
 `QuantumCircuit.rs` define the interface between godot and quantum computing simulators. It also define an interface to load different kind of simulator. When interfacing with a rust simulator, you should add your rust simulator into the dropdown enum over there and the way to construct your simulator in the match pattern code.
 
-`SpinozaSimulator.rs` is an implementation of the QuantumSimulator trait to interface with the Spinoza simulator. Look at this file to give you an idea on what is needed to implement your own simulator. 
+`SpinozaSimulator.rs` is an implementation of the QuantumSimulator trait to interface with the Spinoza simulator. Look at this file to give you an idea on what is needed to implement your own simulator. (https://github.com/QuState/spinoza)
+
+`q1tsimSimulator.rs` same but for q1tsim (https://github.com/Q1tBV/q1tsim)
 
 ## How to run this repo locally/compile
 go into the godot-pennylane-rust folder and use `cargo build` as you would any other rust project.
