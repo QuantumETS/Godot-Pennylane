@@ -79,7 +79,7 @@ The files under the godot/ folder are all related directly to the godot game eng
 
 The files under godot-quantum-rust/ is where the GDextension code to create a quantum circuit node reside.
 
-`libs.rs` is the entry point for godot. from there  `QuantumCircuit.rs` and `SpinozaSimulator.rs` is loaded.
+`libs.rs` is the entry point for godot. from there  `QuantumCircuit.rs` and `somethingnameSimulator.rs` are loaded.
 
 `QuantumCircuit.rs` define the interface between godot and quantum computing simulators. It also define an interface to load different kind of simulator. When interfacing with a rust simulator, you should add your rust simulator into the dropdown enum over there and the way to construct your simulator in the match pattern code.
 
