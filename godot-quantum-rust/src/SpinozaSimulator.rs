@@ -2,11 +2,10 @@ use godot::log::godot_print;
 use crate::QuantumCircuit::QuantumSimulator;
 use godot::prelude::*;
 use spinoza::{
-    config::{Config, QSArgs},
     gates::{apply, Gate, c_apply},
     measurement::measure_qubit,
-    core::{xyz_expectation_value, State, CONFIG},
-    utils::{pretty_print_int, to_table},
+    core::{xyz_expectation_value, State},
+    utils::to_table,
 };
 
 pub struct SpinozaSimulatorStruct {
@@ -25,7 +24,7 @@ impl SpinozaSimulatorStruct {
 }
 
 impl QuantumSimulator for SpinozaSimulatorStruct {
-    fn init_circuit(&mut self, nb_qubits: i64, nb_bits: i64) {
+    fn init_circuit(&mut self, nb_qubits: i64, _nb_bits: i64) {
        self.circuit = Some(State::new(nb_qubits as usize));
        self.circuit_size = nb_qubits;
     }
@@ -70,7 +69,7 @@ impl QuantumSimulator for SpinozaSimulatorStruct {
         }
     }
 
-    fn rx(&mut self, qubits_nb: i64, value:f64) { //phase shift
+    fn rx(&mut self, qubits_nb: i64, value:f64) {
         if let Some(ref mut circuit) = self.circuit {
             apply(Gate::RX(value), circuit, qubits_nb as usize);
         } else {
@@ -78,23 +77,31 @@ impl QuantumSimulator for SpinozaSimulatorStruct {
         }
     }
 
-    fn ry(&mut self, qubits_nb: i64, value:f64) { //phase shift
+    fn ry(&mut self, qubits_nb: i64, value:f64) { 
         if let Some(ref mut circuit) = self.circuit {
-            apply(Gate::RX(value), circuit, qubits_nb as usize);
+            apply(Gate::RY(value), circuit, qubits_nb as usize);
         } else {
             godot_print!("State is not initialized!");
         }
     }
 
-    fn rz(&mut self, qubits_nb: i64, value:f64) { //phase shift
+    fn rz(&mut self, qubits_nb: i64, value:f64) {
         if let Some(ref mut circuit) = self.circuit {
-            apply(Gate::RX(value), circuit, qubits_nb as usize);
+            apply(Gate::RZ(value), circuit, qubits_nb as usize);
         } else {
             godot_print!("State is not initialized!");
         }
     }
 
-    fn identity(&mut self, qubits_nb: i64) {
+    fn s(&mut self, qubits_nb: i64) {
+        if let Some(ref mut circuit) = self.circuit {
+            apply(Gate::RZ(std::f64::consts::PI/2.0), circuit, qubits_nb as usize);
+        } else {
+            godot_print!("State is not initialized!");
+        }
+    }
+
+    fn identity(&mut self, _qubits_nb: i64) {
     }
 
     fn swap(&mut self, qubits_nb_1: i64, qubits_nb_2: i64) {
@@ -103,6 +110,7 @@ impl QuantumSimulator for SpinozaSimulatorStruct {
         // } else {
         //     godot_print!("State is not initialized!");
         // }
+        godot_print!("not implemented")
     }
 
     fn cnot(&mut self, control_qubit_nb: i64, target_qubit_nb: i64) {
@@ -141,22 +149,29 @@ impl QuantumSimulator for SpinozaSimulatorStruct {
         }
     }
 
-    fn get_expectation_value(&mut self, measurement_axis_x_y_z:GString) { 
+    fn get_expectation_value(&mut self, measurement_axis_x_y_z:GString) -> Array<f64> { 
         let now = std::time::Instant::now();
-        let elapsed = now.elapsed().as_micros();
         let targets = (0..self.circuit_size as usize).collect::<Vec<usize>>();
         if let Some(ref circuit) = self.circuit {
             let exp_vals = xyz_expectation_value(measurement_axis_x_y_z.to_string().chars().next().unwrap(), circuit, &targets);
-            godot_print!("expectation values: {:?}", exp_vals);
+            let mut godot_array = Array::new();
+            for value in exp_vals {
+                godot_array.push(value); //reeee
+            }
+            let elapsed = now.elapsed().as_micros();
+            godot_print!("{:?}",elapsed.to_string());
+            godot_array
+        } else { 
+            Array::<f64>::new()
         }
     }
 
-    fn measure_all(&mut self) -> Array<u8> { //currently, we return a u8 per binary result, we could concatenate the different results into fewer variable/virtual u1 instead.
+    fn measure_all(&mut self, _shots:i64) -> Array<GString> { //currently, we return a u8 per binary result, we could concatenate the different results into fewer variable/virtual u1 instead.
         let now = std::time::Instant::now();
-        let mut arr: Array<u8> = Array::new();
+        let mut arr: Array<GString> = Array::new();
         if let Some(ref mut circuit) = self.circuit {
             for t in 0..self.circuit_size {
-                arr.push(measure_qubit(circuit, t as usize, true, None));
+                arr.push(GString::from(measure_qubit(circuit, t as usize, true, None).to_string()));
             }
         }
         let elapsed = now.elapsed().as_micros();

@@ -2,11 +2,11 @@ use godot::prelude::*;
 use godot::engine::Node;
 use godot::engine::INode;
 
+use crate::q1tsimSimulator::q1tsimSimulatorStruct;
 use crate::SpinozaSimulator::SpinozaSimulatorStruct;
 use std::collections::HashMap;
-use qasmsim::statevector::{assert_approx_eq, Complex, StateVector};
+use qasmsim::statevector::StateVector;
 use qasmsim::Histogram;
-use std::f64::consts::FRAC_1_SQRT_2;
 use qasmsim;
 
 
@@ -35,6 +35,7 @@ pub trait QuantumSimulator {
     fn z(&mut self, qubits_nb: i64);
     fn h(&mut self, qubits_nb: i64);
     fn p(&mut self, qubits_nb: i64, value:f64);
+    fn s(&mut self, qubits_nb: i64);
     fn rx(&mut self, qubits_nb: i64, value:f64);
     fn ry(&mut self, qubits_nb: i64, value:f64);
     fn rz(&mut self, qubits_nb: i64, value:f64);
@@ -43,8 +44,8 @@ pub trait QuantumSimulator {
     fn cnot(&mut self, control_qubit_nb: i64, target_qubit_nb: i64);
     fn custom_controlled(&mut self, control_qubit_nb: i64, target_qubit_nb: i64, gatename_x_y_z_rx_ry_rz_h_p:GString, value:f64);
     fn add_measurement(&mut self, qubits_nb: i64);
-    fn get_expectation_value(&mut self, measurement_axis_x_y_z:GString);
-    fn measure_all(&mut self) -> Array<u8>;
+    fn get_expectation_value(&mut self, measurement_axis_x_y_z:GString) -> Array<f64>;
+    fn measure_all(&mut self, shots:i64) -> Array<GString>;
     //default implementation for qasm simulator using qasmsim
     fn run_qasm_str_statevector(&mut self, qasm_string:GString, shots:i64) -> Dictionary
     {
@@ -124,7 +125,6 @@ pub trait QuantumSimulator {
         // Convert Histogram to Godot Dictionary
         let mut godot_dict = Dictionary::new();
         for (key, value_vec) in source {
-            godot_print!("run_qasm_str_histogram {:?}", key);
             let mut godot_array = Array::new();
             for (measured_value, count) in value_vec {
                 let mut pair = Dictionary::new();
@@ -145,7 +145,7 @@ pub trait QuantumSimulator {
 #[godot(via = GString)]
 pub enum Simulator {
     Spinoza,
-    Qasmsim,
+    q1tsim,
 }
 
 fn default_simulator() -> Box<dyn QuantumSimulator> {
@@ -156,7 +156,7 @@ fn default_simulator() -> Box<dyn QuantumSimulator> {
 #[derive(GodotClass)]
 #[class(base=Node)]
 struct QuantumCircuit {
-    quantumSimulator : Box<dyn QuantumSimulator>, // actual simulator "object"
+    quantum_simulator : Box<dyn QuantumSimulator>, // actual simulator "object"
     #[export]
     simulator: Simulator, // enum value selected from the dropdown menu
     base: Base<Node>
@@ -167,7 +167,7 @@ struct QuantumCircuit {
 impl INode for QuantumCircuit {
     fn init(base: Base<Node>) -> Self {        
         Self {
-            quantumSimulator: default_simulator(), // actual simulator "object", default is spinozasimulator
+            quantum_simulator: default_simulator(), // actual simulator "object", default is spinozasimulator
             simulator: Simulator::Spinoza, // enum value selected from the dropdown menu
             base,
         }
@@ -180,124 +180,128 @@ impl QuantumCircuit {
     /// Initialise a quantum circuit on the quantum simulator. This function should be called first before doing anything else (unless using the qasm simulator).
     /// nb_qubits specify the number of Qubits in the circuits that must be initialized. nb_bits specify the number of classical bits used for storing measurement.
     fn init_circuit(&mut self, nb_qubits: i64, nb_bits: i64) {
-        self.quantumSimulator = match self.simulator{
-            Simulator::Spinoza => {Box::new(SpinozaSimulatorStruct::new())}
-            Simulator::Qasmsim => {default_simulator()} // not implemented yet, use spinoza as default
+        self.quantum_simulator = match self.simulator{
+            Simulator::Spinoza => {Box::new(SpinozaSimulatorStruct::new())},
+            Simulator::q1tsim => {Box::new(q1tsimSimulatorStruct::new())}
         };
-        self.quantumSimulator.init_circuit(nb_qubits, nb_bits);
+        self.quantum_simulator.init_circuit(nb_qubits, nb_bits);
     }
 
     #[func]
     /// Applies the X gate to the specified qubit.
     fn x(&mut self, qubits_nb: i64) {
-        self.quantumSimulator.x(qubits_nb);
+        self.quantum_simulator.x(qubits_nb);
     }
 
     #[func]
     /// Applies the Y gate to the specified qubit.
     fn y(&mut self, qubits_nb: i64) {
-        self.quantumSimulator.y(qubits_nb);
+        self.quantum_simulator.y(qubits_nb);
     }
 
     #[func]
     /// Applies the Z gate to the specified qubit.
     fn z(&mut self, qubits_nb: i64) {
-        self.quantumSimulator.z(qubits_nb);
+        self.quantum_simulator.z(qubits_nb);
     }
 
     #[func]
     /// Applies the H gate to the specified qubit.
     fn h(&mut self, qubits_nb: i64) {
-        self.quantumSimulator.h(qubits_nb);
+        self.quantum_simulator.h(qubits_nb);
     }
 
     #[func]
     /// Applies the P (Phase) gate to the specified qubit with a given value (in radians).
     fn p(&mut self, qubits_nb: i64, value:f64) { 
-        self.quantumSimulator.p(qubits_nb,value);
+        self.quantum_simulator.p(qubits_nb,value);
     }
-
+    #[func]
+    fn s(&mut self, qubits_nb: i64) {
+        self.quantum_simulator.s(qubits_nb);
+    }
     #[func]
     /// Applies the RX (Rotation around X-axis) gate to the specified qubit with a given value (in radians).
     fn rx(&mut self, qubits_nb: i64, value:f64) {
-        self.quantumSimulator.rx(qubits_nb,value);
+        self.quantum_simulator.rx(qubits_nb,value);
     }
 
     #[func]
     /// Applies the RY (Rotation around Y-axis) gate to the specified qubit with a given value (in radians).
     fn ry(&mut self, qubits_nb: i64, value:f64) { 
-        self.quantumSimulator.ry(qubits_nb,value);
+        self.quantum_simulator.ry(qubits_nb,value);
     }
 
     #[func]
     /// Applies the RZ (Rotation around Z-axis) gate to the specified qubit with a given value (in radians).
     fn rz(&mut self, qubits_nb: i64, value:f64) {
-        self.quantumSimulator.rz(qubits_nb,value);
+        self.quantum_simulator.rz(qubits_nb,value);
     }
 
     #[func]
     /// Applies the Identity gate to the specified qubit. Does nothing to the qubit.
     fn identity(&mut self, qubits_nb: i64) {
-        self.quantumSimulator.identity(qubits_nb);
+        self.quantum_simulator.identity(qubits_nb);
     }
 
     #[func]
     /// Applies the SWAP gate to exchange the states of two qubits.
     fn swap(&mut self, qubits_nb_1: i64, qubits_nb_2: i64) {
-        self.quantumSimulator.swap(qubits_nb_1,qubits_nb_2);
+        self.quantum_simulator.swap(qubits_nb_1,qubits_nb_2);
     }
 
     #[func]
     /// Applies the Controlled-NOT (CNOT) gate to two qubits.
     fn cnot(&mut self, control_qubit_nb: i64, target_qubit_nb: i64) {
-        self.quantumSimulator.cnot(control_qubit_nb, target_qubit_nb);
+        self.quantum_simulator.cnot(control_qubit_nb, target_qubit_nb);
     }
 
     #[func]
     /// Applies a custom controlled gate to the specified qubits.
     /// The controlled gate is determined by its name and an optional parameter value.
     fn custom_controlled(&mut self, control_qubit_nb: i64, target_qubit_nb: i64, gatename_x_y_z_rx_ry_rz_h_p:GString, value:f64) {
-        self.quantumSimulator.custom_controlled(control_qubit_nb, target_qubit_nb, gatename_x_y_z_rx_ry_rz_h_p, value);
+        self.quantum_simulator.custom_controlled(control_qubit_nb, target_qubit_nb, gatename_x_y_z_rx_ry_rz_h_p, value);
     }
 
     #[func]
     /// Adds a measurement operation to the specified qubit.
     fn add_measurement(&mut self, qubits_nb: i64) {
-        self.quantumSimulator.add_measurement(qubits_nb);
+        self.quantum_simulator.add_measurement(qubits_nb);
     }
 
     #[func]
     /// Retrieves the expectation value of a measurement along a specific axis.
-    fn get_expectation_value(&mut self, measurement_axis_x_y_z:GString) { 
-        self.quantumSimulator.get_expectation_value(measurement_axis_x_y_z);
+    fn get_expectation_value(&mut self, measurement_axis_x_y_z:GString) -> Array<f64> { 
+        self.quantum_simulator.get_expectation_value(measurement_axis_x_y_z)
     }
+
     #[func]
     /// Measures all qubits and returns the results. Each result corresponds to a binary outcome for each qubit.
-    fn measure_all(&mut self) -> Array<u8> { //currently, we return a u8 per binary result, we could concatenate the different results into fewer variable/virtual u1 instead.
-        self.quantumSimulator.measure_all()
+    fn measure_all(&mut self, shots:i64) -> Array<GString> { //currently, we return a u8 per binary result, we could concatenate the different results into fewer variable/virtual u1 instead.
+        self.quantum_simulator.measure_all(shots)
     }
     #[func]
     /// Runs a QASM string to compute the probabilities of outcomes for a given number of shots.
     fn run_qasm_str_probabilities(&mut self, qasm_string:GString, shots:i64) -> Array<f64>
     {
-        self.quantumSimulator.run_qasm_str_probabilities(qasm_string, shots)
+        self.quantum_simulator.run_qasm_str_probabilities(qasm_string, shots)
     }
     #[func]
     /// Runs a QASM string to compute the memory of measurement results for a given number of shots.
     fn run_qasm_str_memory(&mut self, qasm_string:GString, shots:i64) -> Dictionary
     {
-        self.quantumSimulator.run_qasm_str_memory(qasm_string, shots)
+        self.quantum_simulator.run_qasm_str_memory(qasm_string, shots)
     }
     #[func]
     /// Runs a QASM string to retrieve the state vector.
     fn run_qasm_str_statevector(&mut self, qasm_string:GString, shots:i64) -> Dictionary
     {
-        self.quantumSimulator.run_qasm_str_statevector(qasm_string, shots)
+        self.quantum_simulator.run_qasm_str_statevector(qasm_string, shots)
     }
     #[func]
     /// Runs a QASM string to compute the measurement histogram for a given number of shots.
     fn run_qasm_str_histogram(&mut self, qasm_string:GString, shots:i64) -> Dictionary
     {
-        self.quantumSimulator.run_qasm_str_histogram(qasm_string, shots)
+        self.quantum_simulator.run_qasm_str_histogram(qasm_string, shots)
     }
 }
