@@ -13,3 +13,10 @@ spinoza = { git = "https://github.com/QuState/spinoza.git", branch = "main" }
 #moara = { git = "https://github.com/sorin-bolos/moara", branch = "master" }
 qasmsim = { git = "https://github.com/delapuente/qasmsim", branch = "main" }
 q1tsim = { git = "https://github.com/Q1tBV/q1tsim", branch = "master" }
+
+# fix vulnerabilities in the dependencies above.
+[patch.crates-io]
+thread_local = {git = "https://github.com/Amanieu/thread_local-rs", branch = "master"}
+regex = { git = "https://github.com/rust-lang/regex", branch = "master"}
+prettytable-rs = { git = "https://github.com/phsym/prettytable-rs", branch = "master"}
+atty = { git = "https://github.com/Plecra/atty", branch = "patch-1"}

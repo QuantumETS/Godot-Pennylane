@@ -120,8 +120,7 @@ dependencies = [
 [[package]]
 name = "atty"
 version = "0.2.14"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d9b39be18770d11421cdb1b9947a45dd3f37e93092cbf377614828a319d5fee8"
+source = "git+https://github.com/Plecra/atty?branch=patch-1#b6322e5f1a953eea752db1c6646280730fc3e6ab"
 dependencies = [
  "hermit-abi 0.1.19",
  "libc",
@@ -2138,3 +2137,18 @@ dependencies = [
  "quote 1.0.36",
  "syn 2.0.64",
 ]
+
+[[patch.unused]]
+name = "prettytable-rs"
+version = "0.10.0"
+source = "git+https://github.com/phsym/prettytable-rs?branch=master#4d66e6ebddcd52b641369042b68959ad323d9ad0"
+
+[[patch.unused]]
+name = "regex"
+version = "1.11.1"
+source = "git+https://github.com/rust-lang/regex?branch=master#1a069b9232c607b34c4937122361aa075ef573fa"
+
+[[patch.unused]]
+name = "thread_local"
+version = "1.1.8"
+source = "git+https://github.com/Amanieu/thread_local-rs?branch=master#b5aa92903596e5ad1af0fce20d7356dc55934ec5"
