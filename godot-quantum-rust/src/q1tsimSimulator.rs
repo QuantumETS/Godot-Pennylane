@@ -143,11 +143,6 @@ impl QuantumSimulator for q1tsimSimulatorStruct {
         }
     }
 
-    fn get_expectation_value(&mut self, measurement_axis_x_y_z:GString) -> Array<f64> { 
-        godot_print!("expectation values not available on this simulator");
-        Array::<f64>::new()
-    }
-
     fn measure_all(&mut self, shots:i64) -> Array<GString> {
         let now = std::time::Instant::now();
         let mut arr: Array<GString> = Array::new();
