@@ -3,6 +3,7 @@ use godot::engine::Node;
 use godot::engine::INode;
 
 use crate::q1tsimSimulator::q1tsimSimulatorStruct;
+use crate::QasmExporter::QasmExporterStruct;
 use crate::SpinozaSimulator::SpinozaSimulatorStruct;
 use std::collections::HashMap;
 use qasmsim::statevector::StateVector;
@@ -12,11 +13,9 @@ use qasmsim;
 
 // here are technology that could be integrated/choosen from
 //MUST HAVE :
-//https://github.com/QuState/spinoza
 //https://github.com/delapuente/qasmsim
 //BONUS/to look into (in order of how pertinent i think they are):
 //https://github.com/HQSquantumsimulations/qoqo_examples
-//https://github.com/Q1tBV/q1tsim
 //https://github.com/hajifkd/rusq
 //https://github.com/MucTepDayH16/qvnt/
 //https://qcgpu.github.io/
@@ -25,6 +24,9 @@ use qasmsim;
 //https://github.com/mtauraso/QuantumSimulator
 //https://github.com/beneills/quantum <- meh
 //https://github.com/sorin-bolos/moara/blob/master/moara/src/simulator.rs <- not accessible
+//Done but has bugs :
+//https://github.com/QuState/spinoza
+//https://github.com/Q1tBV/q1tsim
 //Attempts : 
 //https://github.com/Renmusxd/RustQIP <- tried it, bad ergonomics
 
@@ -168,7 +170,8 @@ struct QuantumCircuit {
     quantum_simulator : Box<dyn QuantumSimulator>, // actual simulator "object"
     #[export]
     simulator: Simulator, // enum value selected from the dropdown menu
-    base: Base<Node>
+    base: Base<Node>,
+    qasm_exporter : QasmExporterStruct
 }
 
 
@@ -178,6 +181,7 @@ impl INode for QuantumCircuit {
         Self {
             quantum_simulator: default_simulator(), // actual simulator "object", default is spinozasimulator
             simulator: Simulator::Spinoza, // enum value selected from the dropdown menu
+            qasm_exporter: QasmExporterStruct::default(),
             base,
         }
     }
@@ -189,11 +193,12 @@ impl QuantumCircuit {
     /// Initialise a quantum circuit on the quantum simulator. This function should be called first before doing anything else (unless using the qasm simulator).
     /// nb_qubits specify the number of Qubits in the circuits that must be initialized. nb_bits specify the number of classical bits used for storing measurement.
     fn init_circuit(&mut self, nb_qubits: i64, nb_bits: i64) {
-        self.quantum_simulator = match self.simulator{
+        self.quantum_simulator = match self.simulator {
             Simulator::Spinoza => {Box::new(SpinozaSimulatorStruct::new())},
             Simulator::q1tsim => {Box::new(q1tsimSimulatorStruct::new())}
         };
         self.quantum_simulator.init_circuit(nb_qubits, nb_bits);
+        self.qasm_exporter.init_circuit(nb_qubits,nb_qubits); // same number of measurement bit as qubits, might change if an application is found where it would be constraining
     }
 
     #[func]
