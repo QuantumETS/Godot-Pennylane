@@ -148,6 +148,8 @@ pub trait QuantumSimulator {
 
         godot_dict
     }
+    fn export_to_openwasm_string(self) -> GString;
+
 }
 
 
@@ -350,5 +352,12 @@ impl QuantumCircuit {
     fn run_qasm_str_histogram(&mut self, qasm_string:GString, shots:i64) -> Dictionary
     {
         self.quantum_simulator.run_qasm_str_histogram(qasm_string, shots)
+    }
+
+    #[func]
+    /// return the openqasm program in the format of a string
+    fn export_to_openwasm_string(&mut self) -> GString
+    {
+        GString::from(self.qasm_exporter.export_qasm())
     }
 }
