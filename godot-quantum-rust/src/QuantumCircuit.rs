@@ -355,8 +355,8 @@ impl QuantumCircuit {
     }
 
     #[func]
-    /// return the openqasm program in the format of a string
-    fn export_to_openwasm_string(&mut self) -> GString
+    /// Return the openqasm program in the format of a string
+    fn export_to_openqasm_string(&mut self) -> GString
     {
         GString::from(self.qasm_exporter.export_qasm())
     }
