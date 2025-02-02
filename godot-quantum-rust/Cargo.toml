@@ -13,6 +13,7 @@ spinoza = { git = "https://github.com/QuState/spinoza.git", branch = "main" }
 #moara = { git = "https://github.com/sorin-bolos/moara", branch = "master" }
 qasmsim = { git = "https://github.com/delapuente/qasmsim", branch = "main" }
 q1tsim = { git = "https://github.com/Q1tBV/q1tsim", branch = "master" }
+openqasm = { git = "https://github.com/tuomas56/openqasm-rs", branch = "main"}
 
 # fix vulnerabilities in the dependencies above.
 [patch.crates-io]
