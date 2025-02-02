@@ -18,21 +18,21 @@ impl QasmExporterStruct {
     }
     pub fn add_single_qubit_gate(&mut self, gate: &str, qubits_nb: &i64, value: Option<f64>) {
         let qasm_instruction = match value {
-            Some(v) => format!("{}({}) q{};", gate, v, qubits_nb.to_string()),
-            None => format!("{} q{};", gate, qubits_nb.to_string()),
+            Some(v) => format!("{}({}) q[{}];", gate, v, qubits_nb.to_string()),
+            None => format!("{} q[{}];", gate, qubits_nb.to_string()),
         };
         self.qasm_code.push(qasm_instruction);
     }
     pub fn add_controlled_qubit_gate(&mut self, gate: &str, control: &i64, target: &i64, value: Option<f64>)
     {
         let qasm_instruction = match value {
-            Some(v) => format!("{}({}) q{}, q{};", gate, v, control.to_string(), target.to_string()),
-            None => format!("{} q{}, q{};", gate, control.to_string(), target.to_string()),
+            Some(v) => format!("{}({}) q[{}], q[{}];", gate, v, control.to_string(), target.to_string()),
+            None => format!("{} q[{}], q[{}];", gate, control.to_string(), target.to_string()),
         };
         self.qasm_code.push(qasm_instruction);
     }
     pub fn add_measurement(&mut self, qubit: i64) {
-        self.qasm_code.push(format!("measure {}", qubit));
+        self.qasm_code.push(format!("measure q[{}] -> c[{}];", qubit, qubit));
     }
 
     pub fn export_qasm(&self) -> String {
