@@ -118,7 +118,7 @@ impl QuantumSimulator for q1tsimSimulatorStruct {
         }
     }
 
-    fn custom_controlled(&mut self, control_qubit_nb: i64, target_qubit_nb: i64, gatename_x_y_z_rx_ry_rz_h_p:GString, value:f64) {
+    fn custom_controlled(&mut self, control_qubit_nb: i64, target_qubit_nb: i64, gatename_x_y_z_rx_ry_rz_h_p:&GString, value:f64) {
         if let Some(ref mut circuit) = self.circuit {
             let _result = match gatename_x_y_z_rx_ry_rz_h_p.to_string().as_str() {
                 "x" => Ok(circuit.add_gate(gates::CX::new(),&[control_qubit_nb as usize, target_qubit_nb as usize]).unwrap()),

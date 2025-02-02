@@ -107,7 +107,7 @@ impl QuantumSimulator for SpinozaSimulatorStruct {
         // } else {
         //     godot_print!("State is not initialized!");
         // }
-        godot_print!("swap not implemented")
+        godot_print!("swap not implemented for this simulator")
     }
 
     fn cnot(&mut self, control_qubit_nb: i64, target_qubit_nb: i64) {
@@ -118,7 +118,7 @@ impl QuantumSimulator for SpinozaSimulatorStruct {
         }
     }
 
-    fn custom_controlled(&mut self, control_qubit_nb: i64, target_qubit_nb: i64, gatename_x_y_z_rx_ry_rz_h_p:GString, value:f64) {
+    fn custom_controlled(&mut self, control_qubit_nb: i64, target_qubit_nb: i64, gatename_x_y_z_rx_ry_rz_h_p:&GString, value:f64) {
         let result = match gatename_x_y_z_rx_ry_rz_h_p.to_string().as_str() {
             "x" => Ok(Gate::X),
             "y" => Ok(Gate::Y),

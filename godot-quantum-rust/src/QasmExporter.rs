@@ -16,14 +16,14 @@ impl QasmExporterStruct {
         self.qasm_code.push(format!("qreg q[{}];", nb_qubits));
         self.qasm_code.push(format!("creg c[{}];", nb_bits));
     }
-    pub fn add_single_qubit_gate(&mut self, gate: &str, qubits_nb: &i64, value: Option<f64>) {
+    pub fn add_single_qubit_gate(&mut self, gate: &str, qubits_nb: i64, value: Option<f64>) {
         let qasm_instruction = match value {
             Some(v) => format!("{}({}) q[{}];", gate, v, qubits_nb.to_string()),
             None => format!("{} q[{}];", gate, qubits_nb.to_string()),
         };
         self.qasm_code.push(qasm_instruction);
     }
-    pub fn add_controlled_qubit_gate(&mut self, gate: &str, control: &i64, target: &i64, value: Option<f64>)
+    pub fn add_controlled_qubit_gate(&mut self, gate: &str, control: i64, target: i64, value: Option<f64>)
     {
         let qasm_instruction = match value {
             Some(v) => format!("{}({}) q[{}], q[{}];", gate, v, control.to_string(), target.to_string()),
