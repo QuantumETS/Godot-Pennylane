@@ -44,7 +44,7 @@ pub trait QuantumSimulator {
     fn identity(&mut self, qubits_nb: i64);
     fn swap(&mut self, qubits_nb_1: i64, qubits_nb_2: i64);
     fn cnot(&mut self, control_qubit_nb: i64, target_qubit_nb: i64);
-    fn custom_controlled(&mut self, control_qubit_nb: i64, target_qubit_nb: i64, gatename_x_y_z_rx_ry_rz_h_p:GString, value:f64);
+    fn custom_controlled(&mut self, control_qubit_nb: i64, target_qubit_nb: i64, gatename_x_y_z_rx_ry_rz_h_p:&GString, value:f64);
     fn add_measurement(&mut self, qubits_nb: i64);
     fn get_expectation_value(&mut self, measurement_axis_x_y_z:GString) -> Array<f64>
     {
@@ -205,82 +205,107 @@ impl QuantumCircuit {
     /// Applies the X gate to the specified qubit.
     fn x(&mut self, qubits_nb: i64) {
         self.quantum_simulator.x(qubits_nb);
+        self.qasm_exporter.add_single_qubit_gate("x", qubits_nb, None);
     }
 
     #[func]
     /// Applies the Y gate to the specified qubit.
     fn y(&mut self, qubits_nb: i64) {
         self.quantum_simulator.y(qubits_nb);
+        self.qasm_exporter.add_single_qubit_gate("y", qubits_nb, None);
     }
 
     #[func]
     /// Applies the Z gate to the specified qubit.
     fn z(&mut self, qubits_nb: i64) {
         self.quantum_simulator.z(qubits_nb);
+        self.qasm_exporter.add_single_qubit_gate("z", qubits_nb, None);
     }
 
     #[func]
     /// Applies the H gate to the specified qubit.
     fn h(&mut self, qubits_nb: i64) {
         self.quantum_simulator.h(qubits_nb);
+        self.qasm_exporter.add_single_qubit_gate("h", qubits_nb, None);
     }
 
     #[func]
     /// Applies the P (Phase) gate to the specified qubit with a given value (in radians).
     fn p(&mut self, qubits_nb: i64, value:f64) { 
         self.quantum_simulator.p(qubits_nb,value);
+        self.qasm_exporter.add_single_qubit_gate("p", qubits_nb, Some(value));
     }
     #[func]
     fn s(&mut self, qubits_nb: i64) {
         self.quantum_simulator.s(qubits_nb);
+        self.qasm_exporter.add_single_qubit_gate("s", qubits_nb, None);
     }
     #[func]
     /// Applies the RX (Rotation around X-axis) gate to the specified qubit with a given value (in radians).
     fn rx(&mut self, qubits_nb: i64, value:f64) {
         self.quantum_simulator.rx(qubits_nb,value);
+        self.qasm_exporter.add_single_qubit_gate("rx", qubits_nb, Some(value));
     }
 
     #[func]
     /// Applies the RY (Rotation around Y-axis) gate to the specified qubit with a given value (in radians).
     fn ry(&mut self, qubits_nb: i64, value:f64) { 
         self.quantum_simulator.ry(qubits_nb,value);
+        self.qasm_exporter.add_single_qubit_gate("ry", qubits_nb, Some(value));
     }
 
     #[func]
     /// Applies the RZ (Rotation around Z-axis) gate to the specified qubit with a given value (in radians).
     fn rz(&mut self, qubits_nb: i64, value:f64) {
         self.quantum_simulator.rz(qubits_nb,value);
+        self.qasm_exporter.add_single_qubit_gate("rz", qubits_nb, Some(value));
     }
 
     #[func]
     /// Applies the Identity gate to the specified qubit. Does nothing to the qubit.
     fn identity(&mut self, qubits_nb: i64) {
         self.quantum_simulator.identity(qubits_nb);
+        self.qasm_exporter.add_single_qubit_gate("id", qubits_nb, None);
     }
 
     #[func]
     /// Applies the SWAP gate to exchange the states of two qubits.
     fn swap(&mut self, qubits_nb_1: i64, qubits_nb_2: i64) {
         self.quantum_simulator.swap(qubits_nb_1,qubits_nb_2);
+        self.qasm_exporter.add_controlled_qubit_gate("swap", qubits_nb_1, qubits_nb_2, None);
     }
 
     #[func]
     /// Applies the Controlled-NOT (CNOT) gate to two qubits.
     fn cnot(&mut self, control_qubit_nb: i64, target_qubit_nb: i64) {
         self.quantum_simulator.cnot(control_qubit_nb, target_qubit_nb);
+        self.qasm_exporter.add_controlled_qubit_gate("cx", control_qubit_nb, target_qubit_nb, None);
     }
 
     #[func]
     /// Applies a custom controlled gate to the specified qubits.
     /// The controlled gate is determined by its name and an optional parameter value.
     fn custom_controlled(&mut self, control_qubit_nb: i64, target_qubit_nb: i64, gatename_x_y_z_rx_ry_rz_h_p:GString, value:f64) {
-        self.quantum_simulator.custom_controlled(control_qubit_nb, target_qubit_nb, gatename_x_y_z_rx_ry_rz_h_p, value);
+        self.quantum_simulator.custom_controlled(control_qubit_nb, target_qubit_nb, &gatename_x_y_z_rx_ry_rz_h_p, value);
+        let has_value = match gatename_x_y_z_rx_ry_rz_h_p.to_string().as_str() {
+            "x" => None,
+            "y" => None,
+            "z" => None,
+            "h" => None,
+            "rx" => Some(value),
+            "ry" => Some(value),
+            "rz" => Some(value),
+            "p" => Some(value),
+            _ => None,
+        }; 
+        self.qasm_exporter.add_controlled_qubit_gate(&format!("c{}", gatename_x_y_z_rx_ry_rz_h_p), control_qubit_nb, target_qubit_nb, has_value);
     }
 
     #[func]
     /// Adds a measurement operation to the specified qubit.
     fn add_measurement(&mut self, qubits_nb: i64) {
         self.quantum_simulator.add_measurement(qubits_nb);
+        self.qasm_exporter.add_measurement(qubits_nb);
     }
 
     #[func]
