@@ -379,7 +379,7 @@ impl QuantumCircuit {
         file_dialog.call_deferred(StringName::from("popup_centered"), &[]); // need to be deferred to ensure that the object is in the scene tree before being called
         let fd_clone = file_dialog.clone(); // clone a reference to the object, not the object itself.
 
-        //file_dialog.connect("confirmed".into(), fd_clone.callable("queue_free"));
+        file_dialog.connect("confirmed".into(), fd_clone.callable("queue_free")); // destroy the dialog after use, so that we don't endup creating multiple copies of it
 
         file_dialog.show();
         self.base_mut().add_child(file_dialog.upcast());
