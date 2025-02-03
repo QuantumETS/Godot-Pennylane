@@ -12,7 +12,7 @@ impl QasmExporterStruct {
     pub fn init_circuit(&mut self, nb_qubits:i64, nb_bits:i64){
         self.qasm_code.clear();
         self.qasm_code.push("OPENQASM 2.0;".to_string());
-        self.qasm_code.push("include \"qelib1.inc;\"".to_string());
+        self.qasm_code.push("include \"qelib1.inc\";".to_string());
         self.qasm_code.push(format!("qreg q[{}];", nb_qubits));
         self.qasm_code.push(format!("creg c[{}];", nb_bits));
     }
