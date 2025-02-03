@@ -372,7 +372,7 @@ impl QuantumCircuit {
         file_dialog.set_file_mode(FileMode::SAVE_FILE);
         file_dialog.set_access(Access::FILESYSTEM);
         file_dialog.add_filter(GString::from("*.qasm"));
-        file_dialog.add_filter(GString::from("*.*"));
+        file_dialog.set_use_native_dialog(true); 
         
         // Connect "file_selected" signal to call the Rust function
         file_dialog.connect("file_selected".into(), self.base().callable("export_to_openqasm_file"));
@@ -385,18 +385,27 @@ impl QuantumCircuit {
         self.base_mut().add_child(file_dialog.upcast());
         
     }
-    /// use godot file system to export and save a .qasm file
+    /// Use godot file system to export and save a .qasm file
     #[func]
     fn export_to_openqasm_file(&mut self, path: GString)
     {
         let exported_qasm_string = GString::from(self.qasm_exporter.export_qasm());
-        let file = FileAccess::open(path.clone(), ModeFlags::WRITE);
+        let mut received_path = path;
+
+        // If the path doesn't end with ".qasm", append it.
+        if !received_path.to_string().ends_with(".qasm") {
+            let new_path = format!("{}.qasm", received_path.to_string());
+            received_path = GString::from(new_path);
+        }
+
+        
+        let file = FileAccess::open(received_path.clone(), ModeFlags::WRITE);
         
         if let Some(mut file) = file {
             file.store_string(exported_qasm_string);
-            godot_print!("File written successfully to: {}", path);
+            godot_print!("File written successfully to: {}", received_path);
         } else {
-            godot_print!("Failed to open file: {}", path);
+            godot_print!("Failed to open file: {}", received_path);
         }
     }
 }
