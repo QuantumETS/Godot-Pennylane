@@ -162,12 +162,12 @@ pub trait QuantumSimulator {
 #[derive(GodotConvert, Var, Export)]
 #[godot(via = GString)]
 pub enum Simulator {
-    Spinoza,
     q1tsim,
+    Spinoza,
 }
 
 fn default_simulator() -> Box<dyn QuantumSimulator> {
-    Box::new(SpinozaSimulatorStruct::new())
+    Box::new(q1tsimSimulatorStruct::new())
 }
 
 
@@ -201,8 +201,8 @@ impl QuantumCircuit {
     /// nb_qubits specify the number of Qubits in the circuits that must be initialized. nb_bits specify the number of classical bits used for storing measurement.
     fn init_circuit(&mut self, nb_qubits: i64, nb_bits: i64) {
         self.quantum_simulator = match self.simulator {
+            Simulator::q1tsim => {Box::new(q1tsimSimulatorStruct::new())},
             Simulator::Spinoza => {Box::new(SpinozaSimulatorStruct::new())},
-            Simulator::q1tsim => {Box::new(q1tsimSimulatorStruct::new())}
         };
         self.quantum_simulator.init_circuit(nb_qubits, nb_bits);
         self.qasm_exporter.init_circuit(nb_qubits,nb_qubits); // same number of measurement bit as qubits, might change if an application is found where it would be constraining
