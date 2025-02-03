@@ -1,3 +1,9 @@
+use godot::engine::file_access::ModeFlags;
+use godot::engine::file_dialog::FileMode;
+use godot::engine::file_dialog::Access;
+use godot::engine::FileAccess;
+use godot::engine::FileDialog;
+use godot::obj::NewAlloc;
 use godot::prelude::*;
 use godot::engine::Node;
 use godot::engine::INode;
@@ -148,7 +154,6 @@ pub trait QuantumSimulator {
 
         godot_dict
     }
-    fn export_to_openwasm_string(self) -> GString;
 
 }
 
@@ -359,5 +364,39 @@ impl QuantumCircuit {
     fn export_to_openqasm_string(&mut self) -> GString
     {
         GString::from(self.qasm_exporter.export_qasm())
+    }
+
+    #[func]
+    fn export_to_openqasm_file_w_dialog(&mut self) {
+        let mut file_dialog = FileDialog::new_alloc();
+        file_dialog.set_file_mode(FileMode::SAVE_FILE);
+        file_dialog.set_access(Access::FILESYSTEM);
+        file_dialog.add_filter(GString::from("*.qasm"));
+        file_dialog.add_filter(GString::from("*.*"));
+        
+        // Connect "file_selected" signal to call the Rust function
+        file_dialog.connect("file_selected".into(), self.base().callable("export_to_openqasm_file"));
+        file_dialog.call_deferred(StringName::from("popup_centered"), &[]); // need to be deferred to ensure that the object is in the scene tree before being called
+        let fd_clone = file_dialog.clone(); // clone a reference to the object, not the object itself.
+
+        //file_dialog.connect("confirmed".into(), fd_clone.callable("queue_free"));
+
+        file_dialog.show();
+        self.base_mut().add_child(file_dialog.upcast());
+        
+    }
+    /// use godot file system to export and save a .qasm file
+    #[func]
+    fn export_to_openqasm_file(&mut self, path: GString)
+    {
+        let exported_qasm_string = GString::from(self.qasm_exporter.export_qasm());
+        let file = FileAccess::open(path.clone(), ModeFlags::WRITE);
+        
+        if let Some(mut file) = file {
+            file.store_string(exported_qasm_string);
+            godot_print!("File written successfully to: {}", path);
+        } else {
+            godot_print!("Failed to open file: {}", path);
+        }
     }
 }
