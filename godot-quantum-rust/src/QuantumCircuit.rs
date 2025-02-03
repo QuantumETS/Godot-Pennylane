@@ -380,7 +380,7 @@ impl QuantumCircuit {
         let fd_clone = file_dialog.clone(); // clone a reference to the object, not the object itself.
 
         file_dialog.connect("confirmed".into(), fd_clone.callable("queue_free")); // destroy the dialog after use, so that we don't endup creating multiple copies of it
-
+        file_dialog.connect("canceled".into(), fd_clone.callable("queue_free"));
         file_dialog.show();
         self.base_mut().add_child(file_dialog.upcast());
         
