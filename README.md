@@ -1,6 +1,8 @@
 # Godot-Quantum-Simulator-Node
 This repo aim to integrate existing quantum computing simulators within the godot game engine for rapid prototyping of qubits visualization and quantum computing games.
-It exposes a custom **QuantumCircuit** node with a unified interface that can drive different rust simulators (such as Spinoza, Q1tSim, etc.). It supports exportation to OpenQASM 2.0 as well as simulation from an OpenQASM string.
+It exposes a custom **QuantumCircuit** node with a unified interface that can drive different rust simulators (such as Spinoza, Q1tSim, etc.). 
+
+It supports exportation to OpenQASM 2.0 as well as simulation from an OpenQASM 2.0 string.
 
 ## Supported Operators
 
@@ -33,7 +35,7 @@ The **QuantumCircuit** node provides a comprehensive interface to build and simu
 
 - **`p(qubits_nb: i64, value: f64)`**  
   Applies the Phase gate with a custom angle (in radians) to the specified qubit.  
-  *Note:* For the Spinoza simulator, this function behaves similarly to `rz` for most other simulators.  
+  *Note:* This gate behave slightly differently for the Spinoza simulator. On the other simulators, this is exactly the same as `rz`.  
   The operation is logged in the QASM exporter.
 
 - **`rx(qubits_nb: i64, value: f64)`**  
