@@ -1,9 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://dvjk6k1v5xs20"]
 
-[ext_resource type="Script" path="res://scenes/QuantumCircuit.gd" id="1_bfqgr"]
+[ext_resource type="Script" uid="uid://qtyc1w7t41sg" path="res://scenes/QuantumCircuit.gd" id="1_bfqgr"]
 
 [node name="Node" type="Node"]
 
 [node name="QuantumCircuit" type="QuantumCircuit" parent="."]
-simulator = "q1tsim"
 script = ExtResource("1_bfqgr")

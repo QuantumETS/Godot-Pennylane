@@ -1,6 +1,5 @@
 extends QuantumCircuit
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	init_circuit(5,6)
@@ -11,9 +10,11 @@ func _ready():
 	var muh_measure = measure_all(5)
 	print("here are the results : ")
 	print(muh_measure)
-	var exp = get_expectation_value('z')
+	var muh_dict = get_statevector()
+	print(muh_dict)
+	var expa = get_expectation_value('z')
 	print("exp:")
-	print(exp)
+	print(expa)
 	var qasm_string = "
 	  OPENQASM 2.0;
 	  qreg q[1];
@@ -37,6 +38,8 @@ func _ready():
 	print("qasm hist : ")
 	for key in result_hist.keys():
 		print(key,result_hist[key])
+	export_to_openqasm_file_w_dialog()
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
