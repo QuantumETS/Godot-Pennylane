@@ -1,7 +1,6 @@
 use godot::prelude::*;
 use wasmtime::*;
 use wasmtime_wasi::{WasiCtx, WasiCtxBuilder};
-use std::fs::read_to_string;
 
 struct PyWasmInterpreter {
     engine: Engine,
@@ -11,28 +10,35 @@ struct PyWasmInterpreter {
 }
 
 impl PyWasmInterpreter {
-    fn new() -> Self {
+    fn new() -> Option<Self> {
         let engine = Engine::default();
         let wasi_ctx = WasiCtxBuilder::new().inherit_stdio().build();
         let mut store = Store::new(&engine, wasi_ctx);
 
-        let module = Module::from_file(&engine, "godot-quantum-rust\\pyodide\\pyodide.asm.wasm")
-            .expect("Failed to load Pyodide WASM module");
-
-        PyWasmInterpreter {
-            engine,
-            store,
-            module,
-            instance: None,
+        let module = Module::from_file(&engine, "godot-quantum-rust\\pyodide\\pyodide.asm.wasm");
+        match module{
+            Ok(a) => Some(PyWasmInterpreter {
+                engine,
+                store,
+                module:a,
+                instance: None,
+            }),
+            Err(b) =>{ godot_print!("Failed to load Pyodide WASM module"); None},
         }
+            
+
+
     }
 
     fn instantiate(&mut self) {
         let linker = Linker::new(&self.engine);
-        let instance = linker.instantiate(&mut self.store, &self.module)
-            .expect("Failed to instantiate Pyodide");
+        let instance = linker.instantiate(&mut self.store, &self.module);
+        match instance{
+            Ok(a) => (),
+            Err(b) =>godot_print!("Failed to instantiate Pyodide"),
+        }
 
-        self.instance = Some(instance);
+        //self.instance = Some(instance);
     }
 
     fn run_python(&mut self, script: &str) -> String {
@@ -64,15 +70,19 @@ impl PyWasmInterpreter {
 #[derive(GodotClass)]
 #[class(base=Node)]
 struct PythonRunner {
-    py_wasm: PyWasmInterpreter,
+    base: Base<Node>,
+    py_wasm: Option<PyWasmInterpreter>,
 }
 
 #[godot_api]
-impl NodeVirtual for PythonRunner {
+impl INode for PythonRunner {
     fn init(base: Base<Node>) -> Self {
         let mut py_wasm = PyWasmInterpreter::new();
-        py_wasm.instantiate();
-        py_wasm.install_pennylane(); // Install PennyLane when starting
+        match &mut py_wasm {
+            Some(a) => a.instantiate(),
+            None => godot_print!("impossible to instantiate : no available pywasminterpreter")
+        }
+        //py_wasm.install_pennylane(); // Install PennyLane when starting
         Self {
             base,
             py_wasm,
@@ -84,7 +94,10 @@ impl NodeVirtual for PythonRunner {
 impl PythonRunner {
     #[func]
     fn run_python_script(&mut self, script: GString) -> GString {
-        let result = self.py_wasm.run_python(script.to_string().as_str());
+        let result = match &mut self.py_wasm{
+            Some(a) => a.run_python(script.to_string().as_str()),
+            None => "failed to run python".to_string(),
+        };
         GString::from(result)
     }
 }
