@@ -14,6 +14,9 @@ spinoza = { git = "https://github.com/QuState/spinoza.git", branch = "main" }
 qasmsim = { git = "https://github.com/delapuente/qasmsim", branch = "main" }
 q1tsim = { git = "https://github.com/Q1tBV/q1tsim", branch = "master" }
 openqasm = { git = "https://github.com/tuomas56/openqasm-rs", branch = "main"}
+wasmtime = "29.0.1"
+wasmtime-wasi = "29.0.1"
+tokio = { version = "1.43.0", features = ["full"] }
 
 # fix vulnerabilities in the dependencies above.
 [patch.crates-io]
