@@ -1,6 +1,7 @@
 use godot::prelude::*;
 use wasmtime::*;
 use wasmtime_wasi::{WasiCtx, WasiCtxBuilder};
+use std::path::Path;
 
 struct PyWasmInterpreter {
     engine: Engine,
@@ -14,8 +15,8 @@ impl PyWasmInterpreter {
         let engine = Engine::default();
         let wasi_ctx = WasiCtxBuilder::new().inherit_stdio().build();
         let mut store = Store::new(&engine, wasi_ctx);
-
-        let module = Module::from_file(&engine, "godot-quantum-rust\\pyodide\\pyodide.asm.wasm");
+        let wasm_bytes: &[u8] = include_bytes!("../pyodide/pyodide.asm.wasm");
+        let module = Module::new(&engine, wasm_bytes);
         match module{
             Ok(a) => Some(PyWasmInterpreter {
                 engine,
@@ -25,7 +26,6 @@ impl PyWasmInterpreter {
             }),
             Err(b) =>{ godot_print!("Failed to load Pyodide WASM module"); None},
         }
-            
 
 
     }
@@ -33,7 +33,7 @@ impl PyWasmInterpreter {
     fn instantiate(&mut self) {
         let linker = Linker::new(&self.engine);
         let instance = linker.instantiate(&mut self.store, &self.module);
-        match instance{
+        match instance {
             Ok(a) => (),
             Err(b) =>godot_print!("Failed to instantiate Pyodide"),
         }
