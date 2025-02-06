@@ -13,11 +13,11 @@ struct PyWasmInterpreter {
 impl PyWasmInterpreter {
     fn new() -> Option<Self> {
         let engine = Engine::default();
-        let wasi_ctx = WasiCtxBuilder::new().inherit_stdio().build();
-        let mut store = Store::new(&engine, wasi_ctx);
         let wasm_bytes: &[u8] = include_bytes!("../pyodide/pyodide.asm.wasm");
         let module = Module::new(&engine, wasm_bytes);
-        match module{
+        let wasi_ctx = WasiCtxBuilder::new().inherit_stdio().build();
+        let mut store = Store::new(&engine, wasi_ctx);
+        let result = match module{
             Ok(a) => Some(PyWasmInterpreter {
                 engine,
                 store,
@@ -25,35 +25,46 @@ impl PyWasmInterpreter {
                 instance: None,
             }),
             Err(b) =>{ godot_print!("Failed to load Pyodide WASM module"); None},
-        }
-
-
+        };
+        result
     }
 
     fn instantiate(&mut self) {
-        let linker = Linker::new(&self.engine);
-        let instance = linker.instantiate(&mut self.store, &self.module);
-        match instance {
-            Ok(a) => (),
-            Err(b) =>godot_print!("Failed to instantiate Pyodide"),
+        godot_print!("🔍 Instantiating Pyodide...");
+    
+        let mut linker = Linker::new(&self.engine);
+        godot_print!("✅ Linker created.");
+    
+        match linker.instantiate(&mut self.store, &self.module) {
+            Ok(instance) => {
+                godot_print!("✅ Pyodide WASM instantiated successfully.");
+                self.instance = Some(instance);
+            }
+            Err(err) => godot_print!("❌ Failed to instantiate Pyodide: {:?}", err),
         }
-
-        //self.instance = Some(instance);
+    
+        godot_print!("✅ Finished instantiate()");
     }
-
+    
     fn run_python(&mut self, script: &str) -> String {
         if let Some(instance) = &self.instance {
-            let run_func = instance.get_typed_func::<(i32, i32), i32>(&mut self.store, "run_python")
-                .expect("Failed to get Pyodide function");
-
-            let script_ptr = self.allocate_string(script);
-            let result_ptr = run_func.call(&mut self.store, (script_ptr, script.len() as i32))
-                .expect("Failed to execute Python");
-
-            self.read_string(result_ptr)
+            let run_func = instance.get_typed_func::<(i32, i32), i32>(&mut self.store, "run_python");
+    
+            match run_func {
+                Ok(run_func) => {
+                    let script_ptr = self.allocate_string(script);
+                    let result_ptr = run_func.call(&mut self.store, (script_ptr, script.len() as i32));
+    
+                    match result_ptr {
+                        Ok(ptr) => self.read_string(ptr),
+                        Err(err) => format!("❌ Error executing Python: {:?}", err),
+                    }
+                }
+                Err(err) => format!("❌ Failed to get Pyodide function: {:?}", err),
+            }
         } else {
-            "Pyodide not initialized!".to_string()
-        }
+            "❌ Pyodide not initialized! Call instantiate() first.".to_string()
+        }    
     }
 
     fn allocate_string(&mut self, text: &str) -> i32 {
@@ -77,16 +88,17 @@ struct PythonRunner {
 #[godot_api]
 impl INode for PythonRunner {
     fn init(base: Base<Node>) -> Self {
+        godot_print!("🔍 Initializing PythonRunner...");
+
         let mut py_wasm = PyWasmInterpreter::new();
-        match &mut py_wasm {
-            Some(a) => a.instantiate(),
-            None => godot_print!("impossible to instantiate : no available pywasminterpreter")
+        if let Some(ref mut wasm) = py_wasm {
+            godot_print!("✅ PyWasmInterpreter successfully created!");
+            wasm.instantiate();
+        } else {
+            godot_print!("❌ Could not initialize PyWasmInterpreter!");
         }
-        //py_wasm.install_pennylane(); // Install PennyLane when starting
-        Self {
-            base,
-            py_wasm,
-        }
+
+        Self { base, py_wasm }
     }
 }
 
