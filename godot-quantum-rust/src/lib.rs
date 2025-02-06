@@ -4,6 +4,7 @@ mod QuantumCircuit; // libs.rs is godot's entry point, mod QuantumCircuit make o
 mod SpinozaSimulator;
 mod q1tsimSimulator;
 mod QasmExporter;
+mod PyWasmInterpreter;
 
 struct PennylaneGodotRust;
 
