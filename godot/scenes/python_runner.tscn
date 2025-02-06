@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bjm67xny7o101"]
+
+[ext_resource type="Script" uid="uid://dyuqoqipuf63l" path="res://scenes/python_runner.gd" id="1_2he3o"]
+
+[node name="PythonRunner" type="PythonRunner"]
+script = ExtResource("1_2he3o")

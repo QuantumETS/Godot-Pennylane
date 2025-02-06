@@ -1,7 +1,6 @@
 use godot::prelude::*;
 use wasmtime::*;
 use wasmtime_wasi::{WasiCtx, WasiCtxBuilder};
-use std::path::Path;
 
 struct PyWasmInterpreter {
     engine: Engine,
@@ -33,8 +32,8 @@ impl PyWasmInterpreter {
         godot_print!("🔍 Instantiating Pyodide...");
     
         let mut linker = Linker::new(&self.engine);
-        godot_print!("✅ Linker created.");
-    
+        godot_print!("✅ Linker created.");    
+
         match linker.instantiate(&mut self.store, &self.module) {
             Ok(instance) => {
                 godot_print!("✅ Pyodide WASM instantiated successfully.");
