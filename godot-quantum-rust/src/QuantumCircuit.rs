@@ -187,7 +187,7 @@ impl INode for QuantumCircuit {
     fn init(base: Base<Node>) -> Self {        
         Self {
             quantum_simulator: default_simulator(), // actual simulator "object", default is spinozasimulator
-            simulator: Simulator::Spinoza, // enum value selected from the dropdown menu
+            simulator: Simulator::q1tsim, // enum value selected from the dropdown menu
             qasm_exporter: QasmExporterStruct::default(),
             base,
         }
