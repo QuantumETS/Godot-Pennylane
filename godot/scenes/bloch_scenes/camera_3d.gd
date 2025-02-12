@@ -1,7 +1,5 @@
 extends Camera3D
-#x = sin(θ) * cos(φ) where θ and φ are resulting statevector
-#y = sin(θ) * sin(φ)
-#z = cos(θ)
+
 var radius := 10.0  
 var yaw := 0.0      
 var pitch := 0.0    
