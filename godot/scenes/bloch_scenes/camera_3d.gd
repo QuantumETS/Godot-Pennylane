@@ -15,9 +15,9 @@ func _process(delta):
 	var input_vector = Vector2.ZERO
 	
 	# WASD movement: Adjust yaw (horizontal rotation)
-	if Input.is_action_pressed("move_right"):   # D
-		input_vector.x += 1
 	if Input.is_action_pressed("move_left"):    # A
+		input_vector.x += 1
+	if Input.is_action_pressed("move_right"):   # D
 		input_vector.x -= 1
 	if Input.is_action_pressed("move_up"):      # W
 		input_vector.y += 1
