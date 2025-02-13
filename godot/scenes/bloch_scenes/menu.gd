@@ -1,9 +1,14 @@
 extends Control
-
+var rx = 0.0
+var rz = 0.0
 
 func _on_h_slider_value_changed(value: float) -> void:
-	$rx_text.text = "RX(%s)" % (value*2*PI/360)
+	rx = value*2*PI/360
+	$rx_text.text = "RX(%s)" % (rx)
+	$"../QuantumCircuit".update_1_qubit_rxrz_circuit(rx,rz)
 
 
 func _on_v_slider_value_changed(value: float) -> void:
-	$rz_text.text = "RZ(%s)" % (value*2*PI/360)
+	rz = value*2*PI/360
+	$rz_text.text = "RZ(%s)" % (rz)
+	$"../QuantumCircuit".update_1_qubit_rxrz_circuit(rx,rz)
