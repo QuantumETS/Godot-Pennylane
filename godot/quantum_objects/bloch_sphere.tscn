@@ -1,5 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://csc8ku5aalgf0"]
+[gd_scene load_steps=7 format=3 uid="uid://csc8ku5aalgf0"]
 
+[ext_resource type="Script" uid="uid://8mfrin6a4pr1" path="res://quantum_objects/bloch_sphere.gd" id="1_04xke"]
 [ext_resource type="Shader" uid="uid://dp81pw1j5xh2g" path="res://quantum_objects/bloch_sphere.gdshader" id="1_gd5jf"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_w2twt"]
@@ -25,6 +26,7 @@ bottom_radius = 0.005
 height = 0.5
 
 [node name="bloch_sphere" type="Node3D"]
+script = ExtResource("1_04xke")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_w2twt")
