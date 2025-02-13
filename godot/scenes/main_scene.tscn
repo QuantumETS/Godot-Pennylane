@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://dvjk6k1v5xs20"]
+[gd_scene load_steps=8 format=3 uid="uid://dvjk6k1v5xs20"]
 
 [ext_resource type="Script" uid="uid://c0mk8gvjpcnqg" path="res://scenes/bloch_scenes/camera_3d.gd" id="1_7ykc4"]
 [ext_resource type="Script" uid="uid://djabpejumqkyu" path="res://scenes/QuantumCircuit.gd" id="1_bfqgr"]
 [ext_resource type="PackedScene" uid="uid://csc8ku5aalgf0" path="res://quantum_objects/bloch_sphere.tscn" id="2_pw63i"]
+[ext_resource type="Script" uid="uid://cjstyfqt0gdlu" path="res://scenes/bloch_scenes/menu.gd" id="4_gubc5"]
 [ext_resource type="Script" uid="uid://pn1c6f0ic7uw" path="res://scenes/axes.gd" id="4_pu3yx"]
 
 [sub_resource type="Environment" id="Environment_pw63i"]
@@ -24,18 +25,78 @@ script = ExtResource("1_bfqgr")
 
 [node name="Menu" type="Control" parent="."]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("4_gubc5")
+metadata/_edit_use_anchors_ = true
+
+[node name="rx_text" type="RichTextLabel" parent="Menu"]
+layout_mode = 2
+anchor_left = 0.017092
+anchor_top = 0.904306
+anchor_right = 0.953724
+anchor_bottom = 0.939799
+offset_left = -2.23
+offset_right = -2.22998
+grow_horizontal = 2
+grow_vertical = 2
+text = "RX({})"
+fit_content = true
+metadata/_edit_use_anchors_ = true
+
+[node name="rz_text" type="RichTextLabel" parent="Menu"]
+clip_contents = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.621324
+anchor_top = 0.0261574
+anchor_right = 0.972018
+anchor_bottom = 0.0616512
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 0
+text = "RZ({})"
+fit_content = true
+autowrap_mode = 0
+horizontal_alignment = 2
+metadata/_edit_use_anchors_ = true
 
 [node name="BoxContainer" type="BoxContainer" parent="Menu"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.015625
+anchor_top = 0.0277778
+anchor_right = 0.986111
+anchor_bottom = 0.970679
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="HSlider" type="HSlider" parent="Menu/BoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Menu/BoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+
+[node name="HSlider" type="HSlider" parent="Menu/BoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+max_value = 360.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Menu/BoxContainer"]
+layout_mode = 2
+
+[node name="VSlider" type="VSlider" parent="Menu/BoxContainer/HBoxContainer"]
+layout_mode = 2
+max_value = 360.0
 
 [node name="axes" type="MeshInstance3D" parent="."]
 mesh = SubResource("ImmediateMesh_pu3yx")
 script = ExtResource("4_pu3yx")
+
+[connection signal="value_changed" from="Menu/BoxContainer/VBoxContainer/HSlider" to="Menu" method="_on_h_slider_value_changed"]
+[connection signal="value_changed" from="Menu/BoxContainer/HBoxContainer/VSlider" to="Menu" method="_on_v_slider_value_changed"]

@@ -11,6 +11,11 @@ func _ready():
 	
 	update_camera_position()
 
+func _physics_process(delta: float) -> void:
+	var focus_owner = get_viewport().gui_get_focus_owner()
+	if focus_owner:
+		focus_owner.release_focus()
+
 func _process(delta):
 	var input_vector = Vector2.ZERO
 	
@@ -23,7 +28,6 @@ func _process(delta):
 		input_vector.y += 1
 	if Input.is_action_pressed("move_down"):    # S
 		input_vector.y -= 1
-
 	# Update yaw & pitch based on input
 	yaw += input_vector.x * SPEED * delta
 	pitch = clamp(pitch + input_vector.y * SPEED * delta, -PI/2 + 0.1, PI/2 - 0.1)  # Prevent flipping
