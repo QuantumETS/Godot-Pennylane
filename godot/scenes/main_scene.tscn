@@ -14,7 +14,7 @@ background_mode = 1
 [node name="Node" type="Node"]
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.706749, 0, 0.707465, 0, 1, 0, -0.707465, 0, 0.706749, 0.732705, 0.0564037, 0.826591)
+transform = Transform3D(0.1009, 0, 0.994897, 0, 1, 0, -0.994897, 0, 0.1009, 1.16048, 0.0564037, -0.637173)
 environment = SubResource("Environment_pw63i")
 script = ExtResource("1_7ykc4")
 
@@ -40,7 +40,7 @@ anchor_left = 0.015625
 anchor_top = 0.904321
 anchor_right = 0.951389
 anchor_bottom = 0.939815
-text = "RX({})"
+text = "RX(0.0)"
 fit_content = true
 metadata/_edit_use_anchors_ = true
 
@@ -58,7 +58,7 @@ offset_bottom = 0.00799942
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 0
-text = "RZ({})"
+text = "RZ(0.0)"
 fit_content = true
 autowrap_mode = 0
 horizontal_alignment = 2
@@ -84,6 +84,12 @@ anchor_bottom = 0.970679
 grow_horizontal = 2
 grow_vertical = 2
 max_value = 360.0
+metadata/_edit_use_anchors_ = true
+
+[node name="CodeEdit" type="CodeEdit" parent="Menu"]
+layout_mode = 0
+anchor_right = 0.290799
+anchor_bottom = 0.518519
 metadata/_edit_use_anchors_ = true
 
 [node name="axes" type="MeshInstance3D" parent="."]

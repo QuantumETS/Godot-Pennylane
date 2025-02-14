@@ -1,4 +1,4 @@
 extends Node3D
-#x = sin(θ) * cos(φ) where θ and φ are resulting statevector
-#y = sin(θ) * sin(φ)
-#z = cos(θ)
+
+func apply_theta_phi(theta, phi):
+	$MeshInstance3D/Anchor_node.rotation = Vector3(-theta,phi,0.0)
