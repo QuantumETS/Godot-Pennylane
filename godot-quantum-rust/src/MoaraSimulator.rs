@@ -13,7 +13,6 @@ pub struct MoaraSimulatorStruct {
 
 impl MoaraSimulatorStruct {
     pub fn new() -> Self {
-        godot_print!("Running Moara Simulator");
         Self { 
             circuit:None,
             circuit_size:0, 
@@ -149,6 +148,7 @@ impl QuantumSimulator for MoaraSimulatorStruct {
     }
 
     fn measure_all(&mut self) -> Array<u8> { //currently, we return a u8 per binary result, we could concatenate the different results into fewer variable/virtual u1 instead.
+        godot_print!("Running Moara Simulator");
         let now = std::time::Instant::now();
         let mut arr: Array<u8> = Array::new();
         if let Some(ref mut circuit) = self.circuit {

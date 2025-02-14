@@ -11,7 +11,6 @@ pub struct q1tsimSimulatorStruct {
 
 impl q1tsimSimulatorStruct {
     pub fn new() -> Self {
-        godot_print!("Running q1tsim Simulator");
         Self { 
             circuit:None,
             circuit_size:0, 
@@ -144,6 +143,7 @@ impl QuantumSimulator for q1tsimSimulatorStruct {
     }
 
     fn measure_all(&mut self, shots:i64) -> Array<GString> {
+        godot_print!("Running q1tsim Simulator");
         let now = std::time::Instant::now();
         let mut arr: Array<GString> = Array::new();
         if let Some(ref mut circuit) = self.circuit {

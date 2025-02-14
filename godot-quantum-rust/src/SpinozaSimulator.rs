@@ -12,7 +12,6 @@ pub struct SpinozaSimulatorStruct {
 
 impl SpinozaSimulatorStruct {
     pub fn new() -> Self {
-        godot_print!("Running Spinoza Simulator");
         Self { 
             circuit:None,
             circuit_size:0, 
@@ -165,6 +164,7 @@ impl QuantumSimulator for SpinozaSimulatorStruct {
     }
 
     fn measure_all(&mut self, _shots:i64) -> Array<GString> {
+        godot_print!("Running Spinoza Simulator");
         let now = std::time::Instant::now();
         let mut arr: Array<GString> = Array::new();
         let mut to_submit : String = String::new();
