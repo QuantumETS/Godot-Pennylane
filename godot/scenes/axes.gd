@@ -5,8 +5,8 @@ const AXIS_LENGTH = 1.0
 
 func _ready():
 	var x_axis = create_axis(Vector3.RIGHT * (AXIS_LENGTH / 2), AXIS_LENGTH, Color.RED, Vector3(0, 0, deg_to_rad(90)))
-	var y_axis = create_axis(Vector3.UP * (AXIS_LENGTH / 2), AXIS_LENGTH, Color.GREEN, Vector3.ZERO)
-	var z_axis = create_axis(Vector3.FORWARD * (AXIS_LENGTH / 2), AXIS_LENGTH, Color.BLUE, Vector3(deg_to_rad(90), 0, 0))
+	var y_axis = create_axis(Vector3.FORWARD * (AXIS_LENGTH / 2), AXIS_LENGTH, Color.GREEN, Vector3(deg_to_rad(90), 0, 0))
+	var z_axis = create_axis(Vector3.UP * (AXIS_LENGTH / 2), AXIS_LENGTH, Color.BLUE, Vector3.ZERO)
 
 	add_child(x_axis)
 	add_child(y_axis)
