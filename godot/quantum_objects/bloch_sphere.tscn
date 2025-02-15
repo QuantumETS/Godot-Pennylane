@@ -46,7 +46,7 @@ skeleton = NodePath("../..")
 mesh = SubResource("ImmediateMesh_wckv8")
 script = ExtResource("3_bi8iy")
 
-[node name="axis labels" type="Node" parent="."]
+[node name="axis labels" type="Node3D" parent="."]
 
 [node name="∣+⟩" type="Label3D" parent="axis labels"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0, 0)
