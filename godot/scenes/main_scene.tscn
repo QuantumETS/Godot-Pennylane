@@ -103,5 +103,16 @@ text = "Statevector : 1 ∣0⟩ + 0 ∣1⟩"
 horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true
 
+[node name="ColorRect" type="ColorRect" parent="Menu/statevector_txt"]
+z_index = -1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.00277008
+anchor_top = 0.025
+anchor_right = 1.0
+anchor_bottom = 0.6
+color = Color(0, 0, 0, 1)
+metadata/_edit_use_anchors_ = true
+
 [connection signal="value_changed" from="Menu/HSlider" to="Menu" method="_on_h_slider_value_changed"]
 [connection signal="value_changed" from="Menu/VSlider" to="Menu" method="_on_v_slider_value_changed"]
