@@ -1,16 +1,13 @@
-[gd_scene load_steps=9 format=3 uid="uid://dvjk6k1v5xs20"]
+[gd_scene load_steps=7 format=3 uid="uid://dvjk6k1v5xs20"]
 
 [ext_resource type="Script" uid="uid://c0mk8gvjpcnqg" path="res://scenes/bloch_scenes/camera_3d.gd" id="1_7ykc4"]
 [ext_resource type="Script" uid="uid://djabpejumqkyu" path="res://scenes/QuantumCircuit.gd" id="1_bfqgr"]
 [ext_resource type="PackedScene" uid="uid://csc8ku5aalgf0" path="res://quantum_objects/bloch_sphere.tscn" id="2_pw63i"]
 [ext_resource type="Script" uid="uid://cjstyfqt0gdlu" path="res://scenes/bloch_scenes/menu.gd" id="4_gubc5"]
-[ext_resource type="Script" uid="uid://pn1c6f0ic7uw" path="res://scenes/axes.gd" id="4_pu3yx"]
 [ext_resource type="Script" uid="uid://bmhi70yecr1dk" path="res://scenes/code_edit.gd" id="5_rt2n2"]
 
 [sub_resource type="Environment" id="Environment_pw63i"]
 background_mode = 1
-
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_pu3yx"]
 
 [node name="Node" type="Node"]
 
@@ -94,10 +91,6 @@ anchor_bottom = 0.518519
 editable = false
 script = ExtResource("5_rt2n2")
 metadata/_edit_use_anchors_ = true
-
-[node name="axes" type="MeshInstance3D" parent="."]
-mesh = SubResource("ImmediateMesh_pu3yx")
-script = ExtResource("4_pu3yx")
 
 [connection signal="value_changed" from="Menu/HSlider" to="Menu" method="_on_h_slider_value_changed"]
 [connection signal="value_changed" from="Menu/VSlider" to="Menu" method="_on_v_slider_value_changed"]
