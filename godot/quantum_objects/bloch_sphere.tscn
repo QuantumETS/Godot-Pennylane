@@ -10,9 +10,9 @@
 render_priority = 0
 shader = ExtResource("1_gd5jf")
 shader_parameter/albedo = Color(0, 0, 0, 0)
-shader_parameter/wire_color = Color(1, 1, 1, 1)
-shader_parameter/wire_width = 0.58
-shader_parameter/wire_smoothness = 0.1
+shader_parameter/wire_color = Color(0, 0, 0, 0.666667)
+shader_parameter/wire_width = 0.6
+shader_parameter/wire_smoothness = 0.066
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7ykc4"]
 albedo_color = Color(0.780694, 4.54836e-06, 4.81307e-07, 1)
