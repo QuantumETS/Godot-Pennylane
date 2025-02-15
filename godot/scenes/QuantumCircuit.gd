@@ -24,16 +24,10 @@ func update_1_qubit_rxrz_circuit(rx,rz):
 	var real_2 = st["bases"][1]["re"]
 	var im_2 = st["bases"][1]["im"]
 	update_statevector_text(real_1,im_1,real_2,im_2)
-	print("im1:")
-	print(im_1)
-	print("im2:")
-	print(im_2)
 	$bloch_sphere.set_bloch_sphere_to_statevector(real_1,im_1,real_2,im_2)
 	# todo : vérifier équivalence rx(pi) et paulix, plus similaire à un ry
 	# représenter la phase avec les spinors 
-	# afficher le statevector sur l'écran
 	# afficher theta et phi sur le bloch sphere
 	# afficher l'ordre du circuit simuler et donner la possibilité de changer l'ordre
 	# ajouter ry
-	# afficher |+> |-> sur l'axe des x , |i> |-i> sur l'axe des y au bout du vecteur
 	
