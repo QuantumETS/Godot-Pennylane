@@ -1,4 +1,4 @@
-use godot::log::godot_print;
+use godot::global::godot_print;
 use crate::QuantumCircuit::QuantumSimulator;
 use godot::prelude::*;
 use spinoza::{
@@ -174,7 +174,7 @@ impl QuantumSimulator for SpinozaSimulatorStruct {
                 to_submit = format!("{to_submit}{temp}");
             }
         }
-        arr.push(GString::from(to_submit));
+        arr.push(&GString::from(to_submit));
         let elapsed = now.elapsed().as_micros();
         godot_print!(
             "circuit result :  {} \nCaculated in {}s",
@@ -193,10 +193,10 @@ impl QuantumSimulator for SpinozaSimulatorStruct {
         let mut imags_array = Array::new();
         
         for &real in &circuit.reals {
-            reals_array.push(Variant::from(real)); // Convert f64 to Variant
+            reals_array.push(real); // Convert f64 to Variant
         }
         for &imag in &circuit.imags {
-            imags_array.push(Variant::from(imag)); // Convert f64 to Variant
+            imags_array.push(imag); // Convert f64 to Variant
         }
 
         dict.insert("reals", reals_array);

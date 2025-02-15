@@ -1,4 +1,4 @@
-use godot::log::godot_print;
+use godot::global::godot_print;
 use crate::QuantumCircuit::QuantumSimulator;
 use godot::prelude::*;
 use q1tsim::{circuit, gates::{self}};
@@ -154,7 +154,7 @@ impl QuantumSimulator for q1tsimSimulatorStruct {
             for (bits, count) in hist
             {
                 for _ in 0..count{
-                    arr.push(GString::from(bits.clone()));
+                    arr.push(&GString::from(bits.clone()));
                 }
                 godot_print!("{}: {}", bits, count);
             }

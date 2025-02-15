@@ -1,6 +1,6 @@
 use std::path::Path;
 
-use godot::log::godot_print;
+use godot::global::godot_print;
 use openqasm::{GenericError, Parser, SourceCache};
 
 #[derive(Default)]

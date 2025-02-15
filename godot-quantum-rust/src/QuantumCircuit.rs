@@ -1,12 +1,12 @@
-use godot::engine::file_access::ModeFlags;
-use godot::engine::file_dialog::FileMode;
-use godot::engine::file_dialog::Access;
-use godot::engine::FileAccess;
-use godot::engine::FileDialog;
+use godot::classes::file_access::ModeFlags;
+use godot::classes::file_dialog::FileMode;
+use godot::classes::file_dialog::Access;
+use godot::classes::FileAccess;
+use godot::classes::FileDialog;
 use godot::obj::NewAlloc;
 use godot::prelude::*;
-use godot::engine::Node;
-use godot::engine::INode;
+use godot::classes::Node;
+use godot::classes::INode;
 
 use crate::q1tsimSimulator::q1tsimSimulatorStruct;
 use crate::QasmExporter::QasmExporterStruct;
@@ -81,7 +81,7 @@ pub trait QuantumSimulator {
             let mut complex_dict = Dictionary::new();
             complex_dict.insert("re", complex.re);
             complex_dict.insert("im", complex.im);
-            bases_array.push(complex_dict);
+            bases_array.push(&complex_dict);
         }
     
         godot_dict.insert("bases", bases_array);
@@ -147,7 +147,7 @@ pub trait QuantumSimulator {
                 let mut pair = Dictionary::new();
                 pair.insert("measured_value", measured_value);
                 pair.insert("count", count as i64);
-                godot_array.push(pair);
+                godot_array.push(&pair);
             }
             godot_dict.insert(key, godot_array);
         }
@@ -371,18 +371,18 @@ impl QuantumCircuit {
         let mut file_dialog = FileDialog::new_alloc();
         file_dialog.set_file_mode(FileMode::SAVE_FILE);
         file_dialog.set_access(Access::FILESYSTEM);
-        file_dialog.add_filter(GString::from("*.qasm"));
+        file_dialog.add_filter(&GString::from("*.qasm"));
         file_dialog.set_use_native_dialog(true); 
         
         // Connect "file_selected" signal to call the Rust function
-        file_dialog.connect("file_selected".into(), self.base().callable("export_to_openqasm_file"));
-        file_dialog.call_deferred(StringName::from("popup_centered"), &[]); // need to be deferred to ensure that the object is in the scene tree before being called
+        file_dialog.connect("file_selected", &self.base().callable("export_to_openqasm_file"));
+        file_dialog.call_deferred(&StringName::from("popup_centered"), &[]); // need to be deferred to ensure that the object is in the scene tree before being called
         let fd_clone = file_dialog.clone(); // clone a reference to the object, not the object itself.
 
-        file_dialog.connect("confirmed".into(), fd_clone.callable("queue_free")); // destroy the dialog after use, so that we don't endup creating multiple copies of it
-        file_dialog.connect("canceled".into(), fd_clone.callable("queue_free"));
+        file_dialog.connect("confirmed", &fd_clone.callable("queue_free")); // destroy the dialog after use, so that we don't endup creating multiple copies of it
+        file_dialog.connect("canceled", &fd_clone.callable("queue_free"));
         file_dialog.show();
-        self.base_mut().add_child(file_dialog.upcast());
+        self.base_mut().add_child(&file_dialog);
         
     }
     /// Use godot file system to export and save a .qasm file
@@ -399,10 +399,10 @@ impl QuantumCircuit {
         }
 
         
-        let file = FileAccess::open(received_path.clone(), ModeFlags::WRITE);
+        let file = FileAccess::open(&received_path.clone(), ModeFlags::WRITE);
         
         if let Some(mut file) = file {
-            file.store_string(exported_qasm_string);
+            file.store_string(&exported_qasm_string);
             godot_print!("File written successfully to: {}", received_path);
         } else {
             godot_print!("Failed to open file: {}", received_path);
