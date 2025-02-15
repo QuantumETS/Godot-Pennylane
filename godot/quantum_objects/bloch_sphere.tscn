@@ -45,3 +45,29 @@ skeleton = NodePath("../..")
 [node name="axes" type="MeshInstance3D" parent="."]
 mesh = SubResource("ImmediateMesh_wckv8")
 script = ExtResource("3_bi8iy")
+
+[node name="axis labels" type="Node" parent="."]
+
+[node name="∣+⟩" type="Label3D" parent="axis labels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0, 0)
+pixel_size = 0.0013
+billboard = 1
+text = "∣+⟩"
+
+[node name="∣-⟩" type="Label3D" parent="axis labels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0, 0)
+pixel_size = 0.0013
+billboard = 1
+text = "∣-⟩"
+
+[node name="∣-i⟩" type="Label3D" parent="axis labels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.2)
+pixel_size = 0.0013
+billboard = 1
+text = "∣-i⟩"
+
+[node name="∣i⟩" type="Label3D" parent="axis labels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
+pixel_size = 0.0013
+billboard = 1
+text = "∣i⟩"
