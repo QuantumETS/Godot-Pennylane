@@ -15,13 +15,11 @@ func update_1_qubit_rxrz_circuit(rx,rz):
 	var st = run_qasm_str_statevector(export_to_openqasm_string(),1) # use qasmsim to get the statevector
 	$"../Menu/TextEdit".text=export_to_openqasm_string()
 
-	var a = st["bases"][0]["re"]
-	var b = st["bases"][0]["im"]
-	var c = st["bases"][1]["re"]
-	var d = st["bases"][1]["im"]
-	
-	var theta = 2 * acos(sqrt(a * a + b * b))
-	var phi = atan2(d, c) - atan2(b, a) 
-	$bloch_sphere.apply_theta_phi(theta, phi)
-	#todo : add display of the openqasm code in realtime that can be copy and pasted
-	# add button
+	var real_1 = st["bases"][0]["re"]
+	var im_1 = st["bases"][0]["im"]
+	var real_2 = st["bases"][1]["re"]
+	var im_2 = st["bases"][1]["im"]
+	 
+	$bloch_sphere.apply_theta_phi(real_1,im_1,real_2,im_2)
+	# todo : vérifier équivalence rx(pi) et paulix, plus similaire à un ry
+	# représenter la phase avec les spinors 
