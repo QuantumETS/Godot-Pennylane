@@ -85,11 +85,22 @@ max_value = 360.0
 metadata/_edit_use_anchors_ = true
 
 [node name="TextEdit" type="TextEdit" parent="Menu"]
-layout_mode = 0
-anchor_right = 0.290799
-anchor_bottom = 0.518519
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.223958
+anchor_bottom = 0.287037
 editable = false
 script = ExtResource("5_rt2n2")
+metadata/_edit_use_anchors_ = true
+
+[node name="statevector_txt" type="RichTextLabel" parent="Menu"]
+layout_mode = 0
+anchor_left = 0.349826
+anchor_top = 0.0185185
+anchor_right = 0.663194
+anchor_bottom = 0.0802469
+text = "Statevector : 1 ∣0⟩ + 0 ∣1⟩"
+horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [connection signal="value_changed" from="Menu/HSlider" to="Menu" method="_on_h_slider_value_changed"]
