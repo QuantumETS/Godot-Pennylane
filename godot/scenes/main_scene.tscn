@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c0mk8gvjpcnqg" path="res://scenes/bloch_scenes/camera_3d.gd" id="1_7ykc4"]
 [ext_resource type="Script" uid="uid://djabpejumqkyu" path="res://scenes/QuantumCircuit.gd" id="1_bfqgr"]
-[ext_resource type="PackedScene" uid="uid://csc8ku5aalgf0" path="res://quantum_objects/bloch_sphere.tscn" id="2_pw63i"]
+[ext_resource type="PackedScene" uid="uid://csc8ku5aalgf0" path="res://scenes/bloch_scenes/quantum_objects/bloch_sphere.tscn" id="2_pw63i"]
 [ext_resource type="Script" uid="uid://bmhi70yecr1dk" path="res://scenes/code_edit.gd" id="5_rt2n2"]
 [ext_resource type="PackedScene" uid="uid://cd8m7ajbt48tu" path="res://scenes/UI/orderable_sliders.tscn" id="6_rt2n2"]
 
