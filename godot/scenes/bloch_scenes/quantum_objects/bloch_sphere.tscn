@@ -31,13 +31,13 @@ height = 0.5
 [node name="bloch_sphere" type="Node3D"]
 script = ExtResource("1_04xke")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="sphere_mesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_w2twt")
 surface_material_override/0 = SubResource("ShaderMaterial_04xke")
 
-[node name="Anchor_node" type="Node3D" parent="MeshInstance3D"]
+[node name="Anchor_node" type="Node3D" parent="sphere_mesh"]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D/Anchor_node"]
+[node name="vector_mesh" type="MeshInstance3D" parent="sphere_mesh/Anchor_node"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 mesh = SubResource("CylinderMesh_pu3yx")
 skeleton = NodePath("../..")
