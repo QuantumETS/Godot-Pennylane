@@ -1,0 +1,47 @@
+[gd_scene load_steps=9 format=3 uid="uid://csc8ku5aalgf0"]
+
+[ext_resource type="Script" uid="uid://8mfrin6a4pr1" path="res://quantum_objects/bloch_sphere.gd" id="1_04xke"]
+[ext_resource type="Shader" uid="uid://dp81pw1j5xh2g" path="res://quantum_objects/bloch_sphere.gdshader" id="1_gd5jf"]
+[ext_resource type="Script" uid="uid://pn1c6f0ic7uw" path="res://scenes/axes.gd" id="3_bi8iy"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_w2twt"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_04xke"]
+render_priority = 0
+shader = ExtResource("1_gd5jf")
+shader_parameter/albedo = Color(0, 0, 0, 0)
+shader_parameter/wire_color = Color(1, 1, 1, 1)
+shader_parameter/wire_width = 0.138
+shader_parameter/wire_smoothness = 0.066
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7ykc4"]
+albedo_color = Color(0.780694, 4.54836e-06, 4.81307e-07, 1)
+emission_enabled = true
+emission = Color(0.532333, 0.0359835, 0, 1)
+emission_energy_multiplier = 16.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_pu3yx"]
+material = SubResource("StandardMaterial3D_7ykc4")
+top_radius = 0.005
+bottom_radius = 0.005
+height = 0.5
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_wckv8"]
+
+[node name="bloch_sphere" type="Node3D"]
+script = ExtResource("1_04xke")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_w2twt")
+surface_material_override/0 = SubResource("ShaderMaterial_04xke")
+
+[node name="Anchor_node" type="Node3D" parent="MeshInstance3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D/Anchor_node"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+mesh = SubResource("CylinderMesh_pu3yx")
+skeleton = NodePath("../..")
+
+[node name="axes" type="MeshInstance3D" parent="."]
+mesh = SubResource("ImmediateMesh_wckv8")
+script = ExtResource("3_bi8iy")
