@@ -38,7 +38,7 @@ size_flags_vertical = 4
 max_value = 360.0
 step = 0.01
 
-[node name="up" type="Button" parent="VBoxContainer/rx_box"]
+[node name="up1" type="Button" parent="VBoxContainer/rx_box"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 10
 text = "^"
@@ -65,7 +65,7 @@ size_flags_vertical = 4
 max_value = 360.0
 step = 0.01
 
-[node name="up" type="Button" parent="VBoxContainer/ry_box"]
+[node name="up2" type="Button" parent="VBoxContainer/ry_box"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 10
 text = "^"
@@ -92,7 +92,7 @@ size_flags_vertical = 4
 max_value = 360.0
 step = 0.01
 
-[node name="up" type="Button" parent="VBoxContainer/rz_box"]
+[node name="up3" type="Button" parent="VBoxContainer/rz_box"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 10
 text = "^"
@@ -109,5 +109,8 @@ autowrap_mode = 0
 metadata/_edit_use_anchors_ = true
 
 [connection signal="value_changed" from="VBoxContainer/rx_box/rx_slider" to="." method="_on_rx_slider_value_changed"]
+[connection signal="button_up" from="VBoxContainer/rx_box/up1" to="VBoxContainer/rx_box" method="_move_up"]
 [connection signal="value_changed" from="VBoxContainer/ry_box/ry_slider" to="." method="_on_ry_slider_value_changed"]
+[connection signal="button_up" from="VBoxContainer/ry_box/up2" to="VBoxContainer/ry_box" method="_move_up"]
 [connection signal="value_changed" from="VBoxContainer/rz_box/rz_slider" to="." method="_on_rz_slider_value_changed"]
+[connection signal="button_up" from="VBoxContainer/rz_box/up3" to="VBoxContainer/rz_box" method="_move_up"]
