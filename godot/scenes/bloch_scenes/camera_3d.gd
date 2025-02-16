@@ -8,10 +8,9 @@ const SPEED := 2.0
 
 func _ready():
 	radius = sqrt(pow(position.x,2)+pow(position.y,2)+pow(position.z,2))
-	
 	update_camera_position()
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_elta: float) -> void:
 	var focus_owner = get_viewport().gui_get_focus_owner()
 	if focus_owner:
 		focus_owner.release_focus()
@@ -31,7 +30,6 @@ func _process(delta):
 	# Update yaw & pitch based on input
 	yaw += input_vector.x * SPEED * delta
 	pitch = clamp(pitch + input_vector.y * SPEED * delta, -PI/2 + 0.1, PI/2 - 0.1)  # Prevent flipping
-
 	# Update position
 	update_camera_position()
 
