@@ -1,16 +1,19 @@
 extends QuantumCircuit
 
-func update_statevector_text(real1,_im1,real2,im2):
-	# im1 will always be 0
-	var plus1 = "+" # stuff to make string formatting prettier
+func update_statevector_text(real1,im1,real2,im2):
+	var plus0 = "+" # stuff to make string formatting prettier
+	var plus1 = "+" 
 	var plus2 = "+"
+	if im1 < 0: 
+		plus0 = "-"
+		im1 = abs(im1)
 	if real2 < 0: 
 		plus1 = "-"
 		real2 = abs(real2)
 	if im2 < 0: 
 		plus2 = "-"
 		im2 = abs(im2)
-	$"../Menu/statevector_txt".text = "Statevector : %.2f ∣0⟩ %s %.2f %s %.2fi ∣1⟩" % [real1,plus1,real2,plus2,im2]
+	$"../Menu/statevector_txt".text = "Statevector : %.2f %s %.2fi ∣0⟩ %s %.2f %s %.2fi ∣1⟩" % [real1,plus0,im1,plus1,real2,plus2,im2]
 
 func update_1_qubit_circuit(rx,ry,rz,gate_order):
 	init_circuit(1,1)
