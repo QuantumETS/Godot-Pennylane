@@ -31,7 +31,4 @@ func update_1_qubit_circuit(rx,ry,rz,gate_order):
 	update_statevector_text(real_1,im_1,real_2,im_2)
 	$bloch_sphere.set_bloch_sphere_to_statevector(real_1,im_1,real_2,im_2)
 	# todo :
-	# représenter la phase avec les spinors 
 	# afficher theta et phi sur le bloch sphere
-	# afficher l'ordre du circuit simuler et donner la possibilité de changer l'ordre
-	# ajouter option sur bloch_sphere pour cacher axes, axes labels, sphere
