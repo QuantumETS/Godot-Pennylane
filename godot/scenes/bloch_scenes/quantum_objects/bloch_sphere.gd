@@ -22,7 +22,7 @@ func set_current_as_reference_statevector(): # use this to compute global phase
 	reference_statevector = last_statevector
 	set_bloch_sphere_to_statevector(reference_statevector.x,reference_statevector.y,reference_statevector.z,reference_statevector[3])
 	
-
+# chatgpt made this function, need to confirm that it makes sense. see https://arxiv.org/pdf/1312.3824 page 3
 func compute_alpha(real_1, im_1, real_2, im_2):
 	var ref_real_1 = reference_statevector.x
 	var ref_im_1 = reference_statevector.y
