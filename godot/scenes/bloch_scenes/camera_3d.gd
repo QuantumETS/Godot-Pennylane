@@ -10,10 +10,10 @@ func _ready():
 	radius = sqrt(pow(position.x,2)+pow(position.y,2)+pow(position.z,2))
 	update_camera_position()
 
-func _physics_process(_elta: float) -> void:
-	var focus_owner = get_viewport().gui_get_focus_owner()
-	if focus_owner:
-		focus_owner.release_focus()
+#func _physics_process(_elta: float) -> void:
+	#var focus_owner = get_viewport().gui_get_focus_owner()
+	#if focus_owner and Input.is_anything_pressed():
+		#focus_owner.release_focus()
 
 func _process(delta):
 	var input_vector = Vector2.ZERO
