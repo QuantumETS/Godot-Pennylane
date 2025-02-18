@@ -34,8 +34,9 @@ func update_1_qubit_circuit(rx,ry,rz,gate_order):
 	update_statevector_text(real_1,im_1,real_2,im_2)
 	$bloch_sphere.set_bloch_sphere_to_statevector(real_1,im_1,real_2,im_2)
 	# todo :
-	# afficher theta et phi sur le bloch sphere
+	# afficher la ligne pointillé fin du bloch sphere
+	# créer un menu pour cacher différentes élément de la scene + retour au menu principale
 
 
 func _on_bloch_sphere_theta_phi_changed(theta: float, phi: float) -> void:
-	$"../Menu/statevector_txt/phi_theta_txt".text = "ϕ = %.2f; θ = %.2f" % [phi, theta]
+	$"../Menu/statevector_txt/phi_theta_txt".text = "ϕ = %.2f ; θ = %.2f" % [phi, theta]

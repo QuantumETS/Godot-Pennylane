@@ -291,6 +291,6 @@ font_size = 26
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
 pixel_size = 0.0018
 billboard = 1
-modulate = Color(0, 0.431902, 0.345688, 1)
+modulate = Color(0, 0.701011, 0.707311, 1)
 text = "θ"
 font_size = 26
