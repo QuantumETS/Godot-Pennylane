@@ -1,7 +1,8 @@
-[gd_scene load_steps=14 format=3 uid="uid://csc8ku5aalgf0"]
+[gd_scene load_steps=17 format=3 uid="uid://csc8ku5aalgf0"]
 
 [ext_resource type="Script" uid="uid://8mfrin6a4pr1" path="res://scenes/bloch_scenes/quantum_objects/bloch_sphere.gd" id="1_04xke"]
 [ext_resource type="Shader" uid="uid://dp81pw1j5xh2g" path="res://scenes/bloch_scenes/quantum_objects/bloch_sphere.gdshader" id="1_gd5jf"]
+[ext_resource type="Shader" uid="uid://gehci76mouto" path="res://scenes/bloch_scenes/quantum_objects/angle_viz.gdshader" id="3_3irpl"]
 [ext_resource type="Script" uid="uid://pn1c6f0ic7uw" path="res://scenes/axes.gd" id="3_bi8iy"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_w2twt"]
@@ -54,11 +55,26 @@ material = SubResource("StandardMaterial3D_3irpl")
 radius = 0.045
 height = 1.0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l0arh"]
+render_priority = 1
+shader = ExtResource("3_3irpl")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/diameter = 1.0
+shader_parameter/thickness = 0.007
+shader_parameter/frequency = 100.0
+shader_parameter/phase = 0.0
+shader_parameter/theta_start = 0.0
+shader_parameter/theta_end = 0.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_kc0oi"]
+lightmap_size_hint = Vector2i(7, 7)
+material = SubResource("ShaderMaterial_l0arh")
+orientation = 1
+
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_wckv8"]
 
 [node name="bloch_sphere" type="Node3D"]
 script = ExtResource("1_04xke")
-show_global_phase_vec = null
 
 [node name="sphere_mesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_w2twt")
@@ -90,6 +106,10 @@ skeleton = NodePath("")
 [node name="body" type="MeshInstance3D" parent="sphere_mesh/global_phase_vector"]
 transform = Transform3D(-1.09278e-08, -0.25, 0, 0.25, -1.09278e-08, 0, 0, 0, 0.25, 0, 0, 0)
 mesh = SubResource("CapsuleMesh_3irpl")
+
+[node name="phi_mesh" type="MeshInstance3D" parent="sphere_mesh"]
+transform = Transform3D(1, -8.74228e-08, -8.74228e-08, -8.74228e-08, -1, 0, -8.74228e-08, 7.64274e-15, -1, 0, 0, 0)
+mesh = SubResource("QuadMesh_kc0oi")
 
 [node name="axes" type="MeshInstance3D" parent="."]
 mesh = SubResource("ImmediateMesh_wckv8")
