@@ -1,8 +1,8 @@
-[gd_scene load_steps=17 format=3 uid="uid://csc8ku5aalgf0"]
+[gd_scene load_steps=20 format=3 uid="uid://csc8ku5aalgf0"]
 
 [ext_resource type="Script" uid="uid://8mfrin6a4pr1" path="res://scenes/bloch_scenes/quantum_objects/bloch_sphere.gd" id="1_04xke"]
 [ext_resource type="Shader" uid="uid://dp81pw1j5xh2g" path="res://scenes/bloch_scenes/quantum_objects/bloch_sphere.gdshader" id="1_gd5jf"]
-[ext_resource type="Shader" uid="uid://gehci76mouto" path="res://scenes/bloch_scenes/quantum_objects/angle_viz.gdshader" id="3_3irpl"]
+[ext_resource type="Shader" uid="uid://dyjalx7qwoeld" path="res://scenes/bloch_scenes/quantum_objects/angle_viz_mini.gdshader" id="3_3irpl"]
 [ext_resource type="Script" uid="uid://pn1c6f0ic7uw" path="res://scenes/axes.gd" id="3_bi8iy"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_w2twt"]
@@ -55,13 +55,61 @@ material = SubResource("StandardMaterial3D_3irpl")
 radius = 0.045
 height = 1.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_l0arh"]
+[sub_resource type="Shader" id="Shader_3irpl"]
+code = "shader_type spatial;
+render_mode cull_disabled;
+uniform vec4 color : source_color = vec4(1.0);
+uniform float diameter = 1.0; // Circle Diameter
+uniform float thickness = 0.05; // Outline thickness
+uniform float frequency = 10.0; // Controls the number of dots
+uniform float phase = 0.0; // Controls the rotation of the circle
+uniform float theta_start = 0.0; // Start angle in radians
+uniform float theta_end = 3.14; // End angle in radians
+void fragment() {
+  vec2 pos = UV - vec2(0.5);
+  float outer_radius = diameter / 2.0;
+  float inner_radius = outer_radius - thickness;
+  float outer_circle = step(length(pos), outer_radius);
+  float inner_circle = step(length(pos), inner_radius);
+  EMISSION = vec3(1.0,1.0,1.0);
+
+  float angle = atan(pos.y, pos.x);
+  if (angle < 0.0) {
+    angle += 2.0 * PI;
+  }
+  float angle_mask = step(theta_start, angle) * step(angle, theta_end);
+  float wave = 0.5 * sin(frequency * angle + phase) + 0.5;
+  
+
+  float ring = (outer_circle - inner_circle) * angle_mask;
+  ring *= step(0.5, wave);  
+	ALBEDO = color.rgb;
+	ALPHA = ring * color.a;
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kc0oi"]
 render_priority = 1
-shader = ExtResource("3_3irpl")
+shader = SubResource("Shader_3irpl")
 shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/diameter = 1.0
 shader_parameter/thickness = 0.007
 shader_parameter/frequency = 100.0
+shader_parameter/phase = 0.0
+shader_parameter/theta_start = 0.0
+shader_parameter/theta_end = 0.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_ngbyy"]
+lightmap_size_hint = Vector2i(7, 7)
+material = SubResource("ShaderMaterial_kc0oi")
+orientation = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l0arh"]
+render_priority = 1
+shader = ExtResource("3_3irpl")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/diameter = 0.125
+shader_parameter/thickness = 0.007
+shader_parameter/frequency = 10.0
 shader_parameter/phase = 0.0
 shader_parameter/theta_start = 0.0
 shader_parameter/theta_end = 0.0
@@ -108,6 +156,10 @@ transform = Transform3D(-1.09278e-08, -0.25, 0, 0.25, -1.09278e-08, 0, 0, 0, 0.2
 mesh = SubResource("CapsuleMesh_3irpl")
 
 [node name="phi_mesh" type="MeshInstance3D" parent="sphere_mesh"]
+transform = Transform3D(1, -8.74228e-08, -8.74228e-08, -8.74228e-08, -1, 0, -8.74228e-08, 7.64274e-15, -1, 0, 0, 0)
+mesh = SubResource("QuadMesh_ngbyy")
+
+[node name="phi_mesh_small" type="MeshInstance3D" parent="sphere_mesh"]
 transform = Transform3D(1, -8.74228e-08, -8.74228e-08, -8.74228e-08, -1, 0, -8.74228e-08, 7.64274e-15, -1, 0, 0, 0)
 mesh = SubResource("QuadMesh_kc0oi")
 

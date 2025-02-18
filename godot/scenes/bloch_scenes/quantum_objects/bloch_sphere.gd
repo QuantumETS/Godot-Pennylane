@@ -7,8 +7,7 @@ var last_statevector = Vector4(1.0, 0.0, 0.0, 0.0)
 func set_bloch_sphere_to_statevector(real_1,im_1,real_2,im_2):
 	var theta = 2 * acos(sqrt(real_1 ** 2 + im_1 ** 2)) 
 	var phi = atan2(im_2, real_2) - atan2(im_1, real_1) 
-	var material = $sphere_mesh/phi_mesh.mesh.material as ShaderMaterial
-	material.set_shader_parameter("theta_end", phi)
+	draw_dotted_arc_shader(theta,phi)
 	theta_phi_changed.emit(theta,phi)
 	$sphere_mesh/Anchor_node.rotation = Vector3(theta,phi+PI/2,0.0)
 	last_statevector = Vector4(real_1, im_1, real_2, im_2)
@@ -82,3 +81,13 @@ func _update_sphere_visibility(nodename,condition) -> void:
 				child.get_surface_override_material(0).set_shader_parameter("wire_color", Color("00000000"))
 			else:
 				child.get_surface_override_material(0).set_shader_parameter("wire_color", Color("000000aa"))
+
+
+### function relating to drawing theta and phi on the bloch sphere ###
+func draw_dotted_arc_shader(theta,phi):
+	if phi < 0:
+		phi += 2 * PI 
+	var material = $sphere_mesh/phi_mesh.mesh.material as ShaderMaterial
+	material.set_shader_parameter("theta_end", phi)
+	var material2 = $sphere_mesh/phi_mesh_small.mesh.material as ShaderMaterial
+	material2.set_shader_parameter("theta_end", phi)
