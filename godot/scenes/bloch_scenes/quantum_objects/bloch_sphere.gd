@@ -87,7 +87,19 @@ func _update_sphere_visibility(nodename,condition) -> void:
 func draw_dotted_arc_shader(theta,phi):
 	if phi < 0:
 		phi += 2 * PI 
+	# big angle
 	var material = $sphere_mesh/phi_mesh.mesh.material as ShaderMaterial
 	material.set_shader_parameter("theta_end", phi)
+	# small angle
 	var material2 = $sphere_mesh/phi_mesh_small.mesh.material as ShaderMaterial
 	material2.set_shader_parameter("theta_end", phi)
+	# make the phi logo move around
+	$"axis labels/anchor_phi".rotation = Vector3(0.0, phi/2.0, 0.0)
+	# display theta
+	$sphere_mesh/theta_mesh_small.rotation = Vector3(0.0, phi, PI/2.0)
+	var material3 = $sphere_mesh/theta_mesh_small.mesh.material as ShaderMaterial
+	material3.set_shader_parameter("theta_end", theta)
+	# make the theta logo move around
+	$"axis labels/anchor_theta".rotation = Vector3(0.0, phi+PI, theta/2.0)
+	
+	$sphere_mesh/cool_line_mesh
