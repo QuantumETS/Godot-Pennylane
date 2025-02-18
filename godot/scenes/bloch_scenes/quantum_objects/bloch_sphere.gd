@@ -101,5 +101,3 @@ func draw_dotted_arc_shader(theta,phi):
 	material3.set_shader_parameter("theta_end", theta)
 	# make the theta logo move around
 	$"axis labels/anchor_theta".rotation = Vector3(0.0, phi+PI, theta/2.0)
-	
-	$sphere_mesh/cool_line_mesh
