@@ -38,4 +38,6 @@ func update_1_qubit_circuit(rx,ry,rz,gate_order):
 
 
 func _on_bloch_sphere_theta_phi_changed(theta: float, phi: float) -> void:
+	if phi < 0.0: # this is a quick hack, for some reason phi can reach below 0 in specific config ??
+		phi += 2*PI
 	$"../Menu/statevector_txt/phi_theta_txt".text = "ϕ = %.2f ; θ = %.2f" % [phi, theta]
