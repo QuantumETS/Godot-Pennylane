@@ -10,7 +10,7 @@
 render_priority = 0
 shader = ExtResource("1_gd5jf")
 shader_parameter/albedo = Color(0, 0, 0, 0)
-shader_parameter/wire_color = Color(0, 0, 0, 0.666667)
+shader_parameter/wire_color = Color(0, 0, 0, 0.462745)
 shader_parameter/wire_width = 0.6
 shader_parameter/wire_smoothness = 0.066
 
@@ -64,6 +64,8 @@ uniform float frequency = 10.0; // Controls the number of dots
 uniform float phase = 0.0; // Controls the rotation of the circle
 uniform float theta_start = 0.0; // Start angle in radians
 uniform float theta_end = 3.14; // End angle in radians
+uniform float line_dot_frequency = 200.0; // More dots along the line
+uniform float line_width = 0.005; // Thickness of the line
 void fragment() {
   vec2 pos = UV - vec2(0.5);
   float outer_radius = diameter / 2.0;
@@ -82,8 +84,23 @@ void fragment() {
 
   float ring = (outer_circle - inner_circle) * angle_mask;
   ring *= step(0.5, wave);  
-	ALBEDO = color.rgb;
-	ALPHA = ring * color.a;
+    // Compute endpoint of the circle at theta_end
+    vec2 circle_end = vec2(cos(theta_end), sin(theta_end)) * outer_radius;
+
+    // Line interpolation from circle_end to center
+    float line_t = dot(pos - circle_end, -normalize(circle_end)) / length(circle_end);
+    vec2 closest_point = mix(circle_end, vec2(0.0), clamp(line_t, 0.0, 1.0)); // Keeps the line from exceeding limits
+
+    // Distance from current pixel to the line
+    float dist_to_line = length(pos - closest_point);
+
+    // Create the dotted pattern
+    float line_progress = length(closest_point); // Measures distance along the line
+    float line_dots = step(0.5, sin(line_progress * line_dot_frequency)); // Creates dot pattern
+    float line = step(dist_to_line, line_width) * line_dots;
+
+    ALBEDO = color.rgb;
+    ALPHA = max(ring, line) * color.a;
 }"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kc0oi"]
@@ -96,6 +113,8 @@ shader_parameter/frequency = 100.0
 shader_parameter/phase = 0.0
 shader_parameter/theta_start = 0.0
 shader_parameter/theta_end = 0.0
+shader_parameter/line_dot_frequency = 400.0
+shader_parameter/line_width = 0.003
 
 [sub_resource type="QuadMesh" id="QuadMesh_ngbyy"]
 lightmap_size_hint = Vector2i(7, 7)
@@ -156,28 +175,38 @@ render_mode cull_disabled;
 uniform vec4 color : source_color = vec4(1.0);
 uniform float diameter = 1.0; // Circle Diameter
 uniform float thickness = 0.05; // Outline thickness
-uniform float frequency = 10.0; // Controls the number of dots
+uniform float frequency = 300.0; // Controls the number of dots
 uniform float phase = 0.0; // Controls the rotation of the circle
 uniform float theta_start = 0.0; // Start angle in radians
 uniform float theta_end = 3.14; // End angle in radians
+uniform float line_thickness = 0.01;
 void fragment() {
-  vec2 pos = UV - vec2(0.5);
-  float outer_radius = diameter / 2.0;
-  float inner_radius = outer_radius - thickness;
-  float outer_circle = step(length(pos), outer_radius);
-  float inner_circle = step(length(pos), inner_radius);
-  EMISSION = vec3(1.0,1.0,1.0);
+	vec2 pos = UV - vec2(0.5);
+	float outer_radius = diameter / 2.0;
+	float inner_radius = outer_radius - thickness;
+	float outer_circle = step(length(pos), outer_radius);
+	float inner_circle = step(length(pos), inner_radius);
+	EMISSION = vec3(1.0,1.0,1.0);
 
-  float angle = atan(pos.y, pos.x);
-  if (angle < 0.0) {
-    angle += 2.0 * PI;
-  }
-  float angle_mask = step(theta_start, angle) * step(angle, theta_end);
-  float wave = 0.5 * sin(frequency * angle + phase) + 0.5;
-  
+	float angle = atan(pos.y, pos.x);
+	float angle_2 = atan(1.0, pos.x);
+	if (angle < 0.0) {
+		angle += 2.0 * PI;
+		angle_2 += 2.0 * PI;
+	}
+	float angle_mask = step(theta_start, angle) * step(angle, theta_end);
+	float wave = 0.5 * sin(frequency * angle_2 + phase) + 0.2;
 
-  float ring = (outer_circle - inner_circle) * angle_mask;
-  //ring *= step(0.5, wave);  
+	float ring = (outer_circle - inner_circle) * angle_mask;
+	// below is to draw the vertical line from the tip of the unit vector onto the xy plane
+	float projected_length = cos(PI/2.0-theta_end)*0.5;
+	if (pos.y > 0.0 && pos.x > angle_mask*0.5 && pos.y < projected_length && pos.y > projected_length-0.005){
+		ring = 1.0*step(0.5, wave);
+	}
+	if (theta_end> PI/2.0 && pos.y > 0.0 && pos.x < angle_mask-0.5 && pos.x < 0.0 && pos.y < projected_length && pos.y > projected_length-0.005){
+		ring = 1.0*step(0.5, wave);
+	}
+	//ring *= step(0.5, wave);  
 	ALBEDO = color.rgb;
 	ALPHA = ring * color.a;
 }"
@@ -188,10 +217,11 @@ shader = SubResource("Shader_kc0oi")
 shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/diameter = 0.6
 shader_parameter/thickness = 0.007
-shader_parameter/frequency = 10.0
+shader_parameter/frequency = 300.0
 shader_parameter/phase = 0.0
 shader_parameter/theta_start = 0.0
-shader_parameter/theta_end = 0.0
+shader_parameter/theta_end = 2.34
+shader_parameter/line_thickness = 0.05
 
 [sub_resource type="QuadMesh" id="QuadMesh_3yv1i"]
 lightmap_size_hint = Vector2i(7, 7)
@@ -242,6 +272,7 @@ transform = Transform3D(1, -8.74228e-08, -8.74228e-08, -8.74228e-08, -1, 0, -8.7
 mesh = SubResource("QuadMesh_l0arh")
 
 [node name="theta_mesh_small" type="MeshInstance3D" parent="sphere_mesh"]
+transform = Transform3D(-3.09086e-08, -0.707107, 0.707107, 1, -4.37114e-08, 0, 3.09086e-08, 0.707107, 0.707107, 0, 0, 0)
 mesh = SubResource("QuadMesh_3yv1i")
 skeleton = NodePath("../phi_mesh_small")
 

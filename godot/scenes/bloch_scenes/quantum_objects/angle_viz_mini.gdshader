@@ -7,6 +7,8 @@ uniform float frequency = 10.0; // Controls the number of dots
 uniform float phase = 0.0; // Controls the rotation of the circle
 uniform float theta_start = 0.0; // Start angle in radians
 uniform float theta_end = 3.14; // End angle in radians
+
+
 void fragment() {
   vec2 pos = UV - vec2(0.5);
   float outer_radius = diameter / 2.0;

@@ -12,7 +12,7 @@ background_mode = 1
 [node name="Node" type="Node"]
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.1009, 0, 0.994897, 0, 1, 0, -0.994897, 0, 0.1009, 1.16048, 0.0564037, 0.0954434)
+transform = Transform3D(0.0909101, 0, 0.995859, 0, 1, 0, -0.995859, 0, 0.0909101, 1.19805, 0.0564042, -0.0192508)
 environment = SubResource("Environment_pw63i")
 script = ExtResource("1_7ykc4")
 

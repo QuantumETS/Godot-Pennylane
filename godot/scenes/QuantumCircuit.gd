@@ -34,7 +34,6 @@ func update_1_qubit_circuit(rx,ry,rz,gate_order):
 	update_statevector_text(real_1,im_1,real_2,im_2)
 	$bloch_sphere.set_bloch_sphere_to_statevector(real_1,im_1,real_2,im_2)
 	# todo :
-	# afficher la ligne pointillé fin du bloch sphere
 	# créer un menu pour cacher différentes élément de la scene + retour au menu principale
 
 
