@@ -220,7 +220,7 @@ shader_parameter/thickness = 0.007
 shader_parameter/frequency = 300.0
 shader_parameter/phase = 0.0
 shader_parameter/theta_start = 0.0
-shader_parameter/theta_end = 2.34
+shader_parameter/theta_end = 0.0
 shader_parameter/line_thickness = 0.05
 
 [sub_resource type="QuadMesh" id="QuadMesh_3yv1i"]
@@ -272,7 +272,7 @@ transform = Transform3D(1, -8.74228e-08, -8.74228e-08, -8.74228e-08, -1, 0, -8.7
 mesh = SubResource("QuadMesh_l0arh")
 
 [node name="theta_mesh_small" type="MeshInstance3D" parent="sphere_mesh"]
-transform = Transform3D(-3.09086e-08, -0.707107, 0.707107, 1, -4.37114e-08, 0, 3.09086e-08, 0.707107, 0.707107, 0, 0, 0)
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("QuadMesh_3yv1i")
 skeleton = NodePath("../phi_mesh_small")
 
