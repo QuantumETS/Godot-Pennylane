@@ -1,8 +1,8 @@
 extends Camera3D
 
 var radius := 10.0  
-var yaw := 0.0      
-var pitch := 0.0    
+var yaw := -PI/4.0      
+var pitch := PI/4.0
 
 const SPEED := 2.0 
 
