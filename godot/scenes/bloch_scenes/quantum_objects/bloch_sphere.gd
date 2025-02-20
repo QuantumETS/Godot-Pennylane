@@ -66,7 +66,7 @@ func compute_alpha(real_1, im_1, real_2, im_2):
 		if is_inside_tree():
 			$sphere_mesh/global_phase_vector.set_visible(value) # too lazy to make it consistent with the rest
 			
-func _update_node_visibility(nodename,condition,recursive=false) -> void:
+func _update_node_visibility(nodename,condition) -> void:
 	for child in get_children():
 		if child is Node and child.name == nodename:
 			if condition:

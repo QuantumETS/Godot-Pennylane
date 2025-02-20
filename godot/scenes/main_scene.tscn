@@ -1,10 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://dvjk6k1v5xs20"]
+[gd_scene load_steps=9 format=3 uid="uid://dvjk6k1v5xs20"]
 
 [ext_resource type="Script" uid="uid://c0mk8gvjpcnqg" path="res://scenes/bloch_scenes/camera_3d.gd" id="1_7ykc4"]
 [ext_resource type="Script" uid="uid://djabpejumqkyu" path="res://scenes/QuantumCircuit.gd" id="1_bfqgr"]
 [ext_resource type="PackedScene" uid="uid://csc8ku5aalgf0" path="res://scenes/bloch_scenes/quantum_objects/bloch_sphere.tscn" id="2_pw63i"]
+[ext_resource type="Script" uid="uid://cjth5nq5nee3f" path="res://scenes/bloch_scenes/menu.gd" id="4_rt2n2"]
 [ext_resource type="Script" uid="uid://bmhi70yecr1dk" path="res://scenes/code_edit.gd" id="5_rt2n2"]
 [ext_resource type="PackedScene" uid="uid://cd8m7ajbt48tu" path="res://scenes/UI/orderable_sliders.tscn" id="6_rt2n2"]
+[ext_resource type="PackedScene" uid="uid://docw8jtxtht2e" path="res://scenes/UI/esc_menu.tscn" id="7_c16ls"]
 
 [sub_resource type="Environment" id="Environment_pw63i"]
 background_mode = 1
@@ -19,7 +21,7 @@ script = ExtResource("1_7ykc4")
 [node name="QuantumCircuit" type="QuantumCircuit" parent="."]
 script = ExtResource("1_bfqgr")
 
-[node name="bloch_sphere" parent="QuantumCircuit" instance=ExtResource("2_pw63i")]
+[node name="bloch_sphere" parent="QuantumCircuit" groups=["bloch_sphere"] instance=ExtResource("2_pw63i")]
 
 [node name="Menu" type="Control" parent="."]
 layout_mode = 3
@@ -30,6 +32,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+script = ExtResource("4_rt2n2")
 
 [node name="TextEdit" type="TextEdit" parent="Menu"]
 layout_mode = 1
@@ -88,13 +91,26 @@ anchor_top = 0.853395
 [node name="Button" type="Button" parent="Menu"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.823785
-anchor_top = 0.0200617
-anchor_right = 0.975694
-anchor_bottom = 0.103395
+anchor_left = 0.0303819
+anchor_top = 0.356481
+anchor_right = 0.182292
+anchor_bottom = 0.439815
 text = "set reference state
 (for global phase flag)"
 metadata/_edit_use_anchors_ = true
 
+[node name="popup_menu" type="Button" parent="Menu"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -127.0
+offset_bottom = 88.0
+grow_horizontal = 0
+text = "Menu"
+
+[node name="esc_menu" parent="Menu" instance=ExtResource("7_c16ls")]
+
 [connection signal="theta_phi_changed" from="QuantumCircuit/bloch_sphere" to="QuantumCircuit" method="_on_bloch_sphere_theta_phi_changed"]
 [connection signal="button_up" from="Menu/Button" to="QuantumCircuit/bloch_sphere" method="set_current_as_reference_statevector"]
+[connection signal="button_up" from="Menu/popup_menu" to="Menu" method="_on_popup_menu_button_up"]
