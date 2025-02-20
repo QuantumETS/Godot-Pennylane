@@ -6,7 +6,6 @@
 script = ExtResource("1_5in1c")
 
 [node name="gui_holder" type="Control" parent="."]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,53 +22,68 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.222316, 0.2081, 0, 0.596078)
 
-[node name="ColorRect2" type="ColorRect" parent="gui_holder"]
+[node name="AspectRatioContainer" type="Control" parent="gui_holder"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -139.5
-offset_top = -141.0
-offset_right = 139.5
-offset_bottom = 141.0
+offset_left = -166.0
+offset_top = -167.5
+offset_right = 166.0
+offset_bottom = 167.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect2" type="ColorRect" parent="gui_holder/AspectRatioContainer"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -159.5
+offset_top = -153.0
+offset_right = 159.5
+offset_bottom = 153.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.620311, 0.505971, 0, 1)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="gui_holder"]
+[node name="VBoxContainer" type="VBoxContainer" parent="gui_holder/AspectRatioContainer"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -136.5
-offset_top = -138.0
-offset_right = 136.5
-offset_bottom = 138.0
+offset_left = -152.5
+offset_top = -145.5
+offset_right = 152.5
+offset_bottom = 145.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Back to scene" type="Button" parent="gui_holder/VBoxContainer"]
+[node name="Back to scene" type="Button" parent="gui_holder/AspectRatioContainer/VBoxContainer"]
 layout_mode = 2
 text = "Close menu"
 
-[node name="Leave scene to main" type="Button" parent="gui_holder/VBoxContainer"]
+[node name="Leave scene to main" type="Button" parent="gui_holder/AspectRatioContainer/VBoxContainer"]
 layout_mode = 2
 text = "Leave scene to main menu"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="gui_holder/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="gui_holder/AspectRatioContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="LineEdit" type="LineEdit" parent="gui_holder/VBoxContainer/HBoxContainer"]
+[node name="LineEdit" type="Label" parent="gui_holder/AspectRatioContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.53
 text = "Language:"
+justification_flags = 3
 
-[node name="Language" type="OptionButton" parent="gui_holder/VBoxContainer/HBoxContainer"]
+[node name="Language" type="OptionButton" parent="gui_holder/AspectRatioContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 selected = 1
@@ -79,38 +93,39 @@ popup/item_0/id = 0
 popup/item_1/text = "English"
 popup/item_1/id = 1
 
-[node name="axes_CheckBox" type="CheckBox" parent="gui_holder/VBoxContainer"]
+[node name="axes_CheckBox" type="CheckBox" parent="gui_holder/AspectRatioContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 button_pressed = true
 text = "Show Axes"
 metadata/_edit_use_anchors_ = true
 
-[node name="labels_CheckBox" type="CheckBox" parent="gui_holder/VBoxContainer"]
+[node name="labels_CheckBox" type="CheckBox" parent="gui_holder/AspectRatioContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 button_pressed = true
 text = "Show Labels"
 
-[node name="sphere_CheckBox" type="CheckBox" parent="gui_holder/VBoxContainer"]
+[node name="sphere_CheckBox" type="CheckBox" parent="gui_holder/AspectRatioContainer/VBoxContainer"]
 layout_mode = 2
 button_pressed = true
 text = "Show Sphere"
 
-[node name="flag_CheckBox" type="CheckBox" parent="gui_holder/VBoxContainer"]
+[node name="flag_CheckBox" type="CheckBox" parent="gui_holder/AspectRatioContainer/VBoxContainer"]
 layout_mode = 2
 button_pressed = true
 text = "Show Global Phase Flag"
 
-[node name="global_phase_vec_CheckBox" type="CheckBox" parent="gui_holder/VBoxContainer"]
+[node name="global_phase_vec_CheckBox" type="CheckBox" parent="gui_holder/AspectRatioContainer/VBoxContainer"]
 layout_mode = 2
 button_pressed = true
 text = "Show Global Phase Vector"
 
-[connection signal="button_up" from="gui_holder/VBoxContainer/Back to scene" to="." method="_on_back_to_scene_button_up"]
-[connection signal="toggled" from="gui_holder/VBoxContainer/axes_CheckBox" to="." method="_on_axes_check_box_toggled"]
-[connection signal="toggled" from="gui_holder/VBoxContainer/labels_CheckBox" to="." method="_on_labels_check_box_toggled"]
-[connection signal="toggled" from="gui_holder/VBoxContainer/sphere_CheckBox" to="." method="_on_sphere_check_box_toggled"]
-[connection signal="toggled" from="gui_holder/VBoxContainer/flag_CheckBox" to="." method="_on_flag_check_box_toggled"]
-[connection signal="toggled" from="gui_holder/VBoxContainer/global_phase_vec_CheckBox" to="." method="_on_global_phase_vec_check_box_toggled"]
+[connection signal="button_up" from="gui_holder/AspectRatioContainer/VBoxContainer/Back to scene" to="." method="_on_back_to_scene_button_up"]
+[connection signal="item_selected" from="gui_holder/AspectRatioContainer/VBoxContainer/HBoxContainer/Language" to="." method="_on_language_item_selected"]
+[connection signal="toggled" from="gui_holder/AspectRatioContainer/VBoxContainer/axes_CheckBox" to="." method="_on_axes_check_box_toggled"]
+[connection signal="toggled" from="gui_holder/AspectRatioContainer/VBoxContainer/labels_CheckBox" to="." method="_on_labels_check_box_toggled"]
+[connection signal="toggled" from="gui_holder/AspectRatioContainer/VBoxContainer/sphere_CheckBox" to="." method="_on_sphere_check_box_toggled"]
+[connection signal="toggled" from="gui_holder/AspectRatioContainer/VBoxContainer/flag_CheckBox" to="." method="_on_flag_check_box_toggled"]
+[connection signal="toggled" from="gui_holder/AspectRatioContainer/VBoxContainer/global_phase_vec_CheckBox" to="." method="_on_global_phase_vec_check_box_toggled"]

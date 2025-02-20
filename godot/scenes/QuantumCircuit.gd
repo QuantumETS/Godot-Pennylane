@@ -13,7 +13,7 @@ func update_statevector_text(real1,im1,real2,im2):
 	if im2 < 0: 
 		plus2 = "-"
 		im2 = abs(im2)
-	$"../Menu/statevector_txt".text = "Statevector : %.2f %s %.2fi ∣0⟩ %s %.2f %s %.2fi ∣1⟩" % [real1,plus0,im1,plus1,real2,plus2,im2]
+	$"../Menu/statevector_txt".text = tr("Statevector : %.2f %s %.2fi ∣0⟩ %s %.2f %s %.2fi ∣1⟩") % [real1,plus0,im1,plus1,real2,plus2,im2]
 
 func update_1_qubit_circuit(rx,ry,rz,gate_order):
 	init_circuit(1,1)

@@ -33,3 +33,10 @@ func _on_flag_check_box_toggled(toggled_on: bool) -> void:
 func _on_global_phase_vec_check_box_toggled(toggled_on: bool) -> void:
 	for node in get_tree().get_nodes_in_group("bloch_sphere"):
 		node.show_global_phase_vec = toggled_on
+
+
+func _on_language_item_selected(index: int) -> void:
+	if index == 1:
+		TranslationServer.set_locale("en")
+	if index == 0:
+		TranslationServer.set_locale("fr")

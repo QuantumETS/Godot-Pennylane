@@ -1,0 +1,76 @@
+# LANGUAGE translation for godot-quantum-simulator for the following files:
+# res://scenes/main_scene.tscn
+# res://scenes/UI/esc_menu.tscn
+# res://scenes/QuantumCircuit.gd
+#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: godot-quantum-simulator\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8-bit\n"
+
+#: scenes/main_scene.tscn
+msgid "Statevector : 1 ∣0⟩ + 0 ∣1⟩"
+msgstr ""
+
+#: scenes/main_scene.tscn
+msgid "ϕ = 0.0 ; θ = 0.0"
+msgstr ""
+
+#: scenes/main_scene.tscn
+msgid ""
+"set reference state\n"
+"(for global phase flag)"
+msgstr ""
+
+#: scenes/main_scene.tscn
+msgid "Menu"
+msgstr ""
+
+#: scenes/UI/esc_menu.tscn
+msgid "Close menu"
+msgstr ""
+
+#: scenes/UI/esc_menu.tscn
+msgid "Leave scene to main menu"
+msgstr ""
+
+#: scenes/UI/esc_menu.tscn
+msgid "Language:"
+msgstr ""
+
+#: scenes/UI/esc_menu.tscn
+msgid "Français"
+msgstr ""
+
+#: scenes/UI/esc_menu.tscn
+msgid "English"
+msgstr ""
+
+#: scenes/UI/esc_menu.tscn
+msgid "Show Axes"
+msgstr ""
+
+#: scenes/UI/esc_menu.tscn
+msgid "Show Labels"
+msgstr ""
+
+#: scenes/UI/esc_menu.tscn
+msgid "Show Sphere"
+msgstr ""
+
+#: scenes/UI/esc_menu.tscn
+msgid "Show Global Phase Flag"
+msgstr ""
+
+#: scenes/UI/esc_menu.tscn
+msgid "Show Global Phase Vector"
+msgstr ""
+
+#: scenes/QuantumCircuit.gd
+msgid "Statevector : %.2f %s %.2fi ∣0⟩ %s %.2f %s %.2fi ∣1⟩"
+msgstr ""
